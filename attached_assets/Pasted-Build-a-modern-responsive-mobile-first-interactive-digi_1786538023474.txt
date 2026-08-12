@@ -1,0 +1,97 @@
+Build a modern, responsive, mobile-first interactive digital product catalog website using HTML, Tailwind CSS, and standard JavaScript (or React). The website is designed as a digital directory for orthopedic surgeons, rehabilitation centers, and patients to explore advanced mobility solutions and submit patient referrals.
+
+### 🎨 Design & Visual Guidelines:
+- **Theme/Tone:** Clean, professional, modern medical/healthcare tech UI.
+- **Color Palette:**
+  - Primary: Deep Healthcare Blue (`#1E3A8A` or `#0F172A`)
+  - Accent/Highlight: Modern Teal / Electric Cyan (`#06B6D4` or `#0D9488`)
+  - Background: Clean Light Slate (`#F8FAFC`) with crisp white card containers (`#FFFFFF`).
+- **Typography:** Sans-serif (Inter or System UI font stack), clean line-height, with full support for RTL Arabic text where applicable.
+- **UI Elements:** Floating navigation bar, hover effects on product cards, modal windows for detailed specifications, interactive filtering, and sticky referral call-to-action buttons.
+
+---
+
+### 🗂️ Complete Site Map & Content Architecture:
+
+#### 1. Home / Main Landing Hub (`/index.html` or `/`)
+- **Hero Section:**
+  - Catchy Headline: "Advanced Prosthetic & Orthotic Mobility Solutions"
+  - Subheadline: "Interactive clinical directory for medical specialists, orthopedic surgeons, and physical therapy centers."
+  - CTA Buttons: "Explore Catalog" (scrolls to products) and "Refer a Patient" (launches referral modal or navigates to form).
+- **Quick Category Grid (Card Layout):**
+  - 🦿 **Prosthetic Solutions** (Interactive socket systems, bionics, microprocessors)
+  - 🦴 **Orthotic Bracing** (Spinal braces, AFOs/KAFOs, custom 3D insoles)
+  - 📹 **Clinical Case Studies** (Patient outcomes & gait demonstrations)
+  - 📋 **Doctor & Clinic Referral** (Fast digital referral intake)
+
+---
+
+#### 2. Interactive Product Catalog Component
+Include tabbed filtering: `[ All ] [ Prosthetics ] [ Orthotics ] [ Socket Technologies ]`
+
+**Featured Products to Pre-load with Rich Data Cards:**
+
+- **Product 1: RevoFit Micro-Adjustable Socket System**
+  - Category: `Prosthetics` / `Socket Technologies`
+  - Tags: `Click Medical`, `Volume Adjustment`, `Lower Limb`
+  - Specs: Micro-adjustable BOA dial mechanism allowing patients to control socket tightness on demand as limb volume changes throughout the day.
+  - Interactive Action: "View Clinical Specs" (opens modal with video/diagram placeholder and detailed indications).
+
+- **Product 2: RevoLock Suspension & Lacing Lock**
+  - Category: `Prosthetics` / `Socket Technologies`
+  - Tags: `Click Medical`, `Suspension`, `Distal Lock`
+  - Specs: Smooth reel-based suspension mechanism for easy donning/doffing and secure socket retention.
+  - Interactive Action: "View Clinical Specs".
+
+- **Product 3: Microprocessor Smart Knee Joint**
+  - Category: `Prosthetics`
+  - Tags: `Above Knee`, `Smart Prosthetics`, `Cadence Adaptation`
+  - Specs: Real-time stance and swing control adjusting to variable walking speeds and terrain changes.
+
+- **Product 4: Custom 3D Printed Diabetic Insoles & AFOs**
+  - Category: `Orthotics`
+  - Tags: `Foot Care`, `Offloading`, `Custom Gait Correction`
+  - Specs: Precision CAD/CAM scanned insoles for plantar pressure offloading and alignment correction.
+
+---
+
+#### 3. Product Specification Modal (Pop-up Component)
+- When a user clicks "View Clinical Specs" on any product card, open an interactive modal with:
+  - Product Title & High-Res Image Placeholder
+  - Key Clinical Benefits & Indications
+  - Technical Specifications (Materials, Weight Limit, Adjustment Mechanism)
+  - Action Button: "Refer Patient for this Device" (Pre-fills referral form with selected product name).
+
+---
+
+#### 4. Clinical Outcomes & Case Studies Section
+- **Video / Media Gallery Grid:**
+  - Embeddable placeholders for gait analysis videos, socket adjustment demos (e.g., Click Medical RP-200 dial assembly), and patient mobility tests.
+  - Quick filters for `[ Before/After Gait ]`, `[ Socket Adjustments ]`, `[ Patient Interviews ]`.
+
+---
+
+#### 5. Interactive Digital Patient Referral Form Component
+Include an accessible form (or modal popup) with the following fields:
+1. **Referring Physician / Center Name** (Text input)
+2. **Contact Number / Email** (Tel/Email input)
+3. **Patient Age / Location** (Text input)
+4. **Clinical Category** (Dropdown: Lower Limb Prosthetics, Upper Limb Bionics, Orthotic Bracing, Diabetic Footwear, General Consultation)
+5. **Specific Device Requested** (Optional text input / auto-populated from product modal)
+6. **Clinical Notes / Upload File** (Textarea + file upload button for X-rays or prescription notes)
+7. **Submit Button:** Triggers a success confirmation modal with direct WhatsApp redirection link.
+
+---
+
+#### 6. Footer & Contact
+- Clinic branding, location map placeholder (Amman, Jordan), direct WhatsApp contact button, and QR code modal trigger for instant mobile sharing.
+
+---
+
+### 💻 Technical Instructions for Replit:
+1. Create clean, modular files (`index.html`, `style.css` or Tailwind CDN, `app.js`).
+2. Add JavaScript logic for:
+   - Dynamic product category filtering without page reloads.
+   - Opening/closing product detail modals.
+   - Simple referral form submission validation with a success popup.
+3. Make sure all cards and grids are fully responsive on mobile devices (375px width and above).
