@@ -10,6 +10,10 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: catalog
+    description: Catalog browsing operations
+  - name: referrals
+    description: Patient referral operations
 paths:
   /healthz:
     get:
@@ -24,6 +28,76 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /catalog/overview:
+    get:
+      operationId: getCatalogOverview
+      tags: [catalog]
+      summary: Get the catalog overview
+      description: Returns the categories, featured solutions, and trust metrics for the landing page.
+      responses:
+        "200":
+          description: Catalog overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogOverview"
+  /catalog/categories/{slug}:
+    get:
+      operationId: getCatalogCategory
+      tags: [catalog]
+      summary: Get a catalog category
+      description: Returns the solutions and workflow information for a catalog category.
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Catalog category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogCategory"
+        "404":
+          description: Category not found
+  /locations:
+    get:
+      operationId: getLocations
+      tags: [catalog]
+      summary: Get clinic locations
+      description: Returns clinic locations and direct contact details.
+      responses:
+        "200":
+          description: Clinic locations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ClinicLocation"
+  /referrals:
+    post:
+      operationId: createReferral
+      tags: [referrals]
+      summary: Submit a patient referral
+      description: Creates a referral request for the clinical team.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReferralInput"
+      responses:
+        "201":
+          description: Referral received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferralReceipt"
+        "400":
+          description: Invalid referral data
 components:
   schemas:
     HealthStatus:
@@ -33,4 +107,200 @@ components:
           type: string
       required:
         - status
+    CatalogOverview:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/CatalogCategorySummary"
+        featuredSolutions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Solution"
+        metrics:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrustMetric"
+      required:
+        - categories
+        - featuredSolutions
+        - metrics
+    CatalogCategorySummary:
+      type: object
+      properties:
+        slug:
+          type: string
+        title:
+          type: string
+        titleArabic:
+          type: string
+        description:
+          type: string
+        solutionCount:
+          type: number
+        accent:
+          type: string
+      required:
+        - slug
+        - title
+        - titleArabic
+        - description
+        - solutionCount
+        - accent
+    CatalogCategory:
+      type: object
+      properties:
+        slug:
+          type: string
+        title:
+          type: string
+        titleArabic:
+          type: string
+        description:
+          type: string
+        solutions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Solution"
+        workflow:
+          type: array
+          items:
+            type: string
+      required:
+        - slug
+        - title
+        - titleArabic
+        - description
+        - solutions
+        - workflow
+    Solution:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        titleArabic:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        imageKey:
+          type: string
+        featured:
+          type: boolean
+      required:
+        - id
+        - title
+        - titleArabic
+        - category
+        - description
+        - tags
+        - imageKey
+        - featured
+    TrustMetric:
+      type: object
+      properties:
+        value:
+          type: string
+        label:
+          type: string
+        labelArabic:
+          type: string
+      required:
+        - value
+        - label
+        - labelArabic
+    ClinicLocation:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        nameArabic:
+          type: string
+        address:
+          type: string
+        phone:
+          type: string
+        whatsapp:
+          type: string
+        hours:
+          type: string
+        mapUrl:
+          type: string
+        isPrimary:
+          type: boolean
+      required:
+        - id
+        - name
+        - nameArabic
+        - address
+        - phone
+        - whatsapp
+        - hours
+        - mapUrl
+        - isPrimary
+    ReferralInput:
+      type: object
+      properties:
+        referrerName:
+          type: string
+          minLength: 2
+        organization:
+          type: string
+          minLength: 2
+        phone:
+          type: string
+          minLength: 5
+        email:
+          type: string
+        patientName:
+          type: string
+          minLength: 2
+        patientAge:
+          type: number
+          minimum: 0
+          maximum: 120
+        areaOfNeed:
+          type: string
+          enum: [prosthetics, orthotics, other]
+        clinicalNotes:
+          type: string
+          minLength: 10
+        preferredContact:
+          type: string
+          enum: [phone, whatsapp, email]
+      required:
+        - referrerName
+        - organization
+        - phone
+        - patientName
+        - areaOfNeed
+        - clinicalNotes
+        - preferredContact
+    ReferralReceipt:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+        receivedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - status
+        - message
+        - receivedAt
 

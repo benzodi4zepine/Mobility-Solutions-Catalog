@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Mobility Solutions Catalog"
+description = "A bilingual digital catalog for a mobility solutions company, helping clinicians, patients, and families explore prosthetic and orthotic solutions, clinical outcomes, and submit fast referrals."
+version = "1.0.0"
+id = "artifacts/mobility-catalog"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23611
+
+[services.development]
+run = "pnpm --filter @workspace/mobility-catalog run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mobility-catalog", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/mobility-catalog/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23611"
+BASE_PATH = "/"
