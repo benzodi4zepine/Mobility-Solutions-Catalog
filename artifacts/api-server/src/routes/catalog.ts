@@ -163,14 +163,14 @@ const metrics = [
 
 const locations = [
   {
-    id: "riyadh",
-    name: "Riyadh Mobility Center",
-    nameArabic: "مركز الرياض للتنقل",
-    address: "King Fahd Road, Al Olaya, Riyadh",
-    phone: "+966 11 555 0140",
-    whatsapp: "966115550140",
+    id: "amman",
+    name: "Mafaz Mobility Center",
+    nameArabic: "مركز مفاز للأطراف الاصطناعية والأجهزة المساندة",
+    address: "Alrazi Street, Amman, Jordan",
+    phone: "+962795185080",
+    whatsapp: "962795185080",
     hours: "Sun–Thu · 8:00–18:00",
-    mapUrl: "https://maps.google.com/?q=King+Fahd+Road+Riyadh",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Alrazi+Street%2C+Amman%2C+Jordan",
     isPrimary: true,
   },
 ];
