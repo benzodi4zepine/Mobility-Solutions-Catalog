@@ -8,6 +8,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
 import { Route, Switch, Link, useLocation, useParams, Router as WouterRouter } from 'wouter';
 import mafazLogo from '@assets/Screenshot_2025-10-02_120532-removebg-preview_1786537533167.png';
+import heroFitting from '@assets/mafaz-hero-fitting.jpg';
 
 const queryClient = new QueryClient();
 
@@ -113,15 +114,21 @@ function ProductArt({ imageKey, accent = 'teal', large = false }: { imageKey: st
 }
 
 function HeroArt() {
-  return <div className="relative mx-auto aspect-square w-full max-w-[510px] lg:ml-auto">
-    <div className="absolute inset-[8%] rounded-[46%_54%_48%_52%] bg-[hsl(var(--secondary)/.12)] blur-[1px]" />
-    <div className="orb absolute inset-[17%] rounded-[43%_57%_62%_38%] bg-[hsl(var(--secondary))]" />
-    <div className="absolute inset-[29%] rounded-[46%_54%_50%_50%] border-[20px] border-[hsl(var(--background))] bg-[hsl(var(--primary))] shadow-[0_24px_80px_hsl(var(--primary)/.18)]" />
-    <div className="absolute left-[41%] top-[19%] h-[28%] w-[8%] -rotate-12 rounded-full bg-[hsl(var(--accent))]" />
-    <div className="absolute bottom-[21%] right-[14%] flex items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card)/.95)] px-3 py-2 text-[10px] font-bold uppercase tracking-[.16em] shadow-lg"><span className="size-2 rounded-full bg-[hsl(var(--secondary))]" /> responsive fit</div>
-    <div className="absolute left-[2%] top-[35%] max-w-[145px] rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card)/.9)] p-3 shadow-lg backdrop-blur"><span className="block font-mono text-[10px] text-[hsl(var(--secondary))]">01 / 03</span><span className="mt-2 block text-xs font-semibold leading-4">Movement, measured differently.</span></div>
-     <div className="absolute bottom-[9%] left-[18%] font-serif text-6xl text-[hsl(var(--primary)/.1)]">M</div>
-  </div>;
+  return <figure className="relative mx-auto w-full max-w-[480px] lg:ml-auto">
+    <div className="absolute -inset-2 rounded-[2.1rem] bg-[hsl(var(--secondary)/.1)]" aria-hidden="true" />
+    <div className="absolute -right-3 -top-4 size-24 rounded-full border-[14px] border-[hsl(var(--secondary)/.16)]" aria-hidden="true" />
+    <div className="relative overflow-hidden rounded-[1.9rem] bg-[hsl(var(--muted))] shadow-[0_24px_80px_hsl(var(--primary)/.18)]">
+      <img src={heroFitting} alt="A clinician fitting a carbon-fibre myoelectric arm and bionic hand with a patient" width={1200} height={1800} loading="eager" className="aspect-[4/5] w-full object-cover" data-testid="image-hero" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[hsl(var(--primary)/.42)] via-transparent to-transparent" aria-hidden="true" />
+    </div>
+    <div className="absolute bottom-[7%] right-[5%] flex items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card)/.95)] px-3 py-2 text-[10px] font-bold uppercase tracking-[.16em] shadow-lg backdrop-blur">
+      <span className="size-2 rounded-full bg-[hsl(var(--secondary))]" /> responsive fit
+    </div>
+    <div className="absolute left-[4%] top-[18%] max-w-[145px] rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card)/.92)] p-3 shadow-lg backdrop-blur">
+      <span className="block font-mono text-[10px] text-[hsl(var(--secondary))]">01 / 03</span>
+      <span className="mt-2 block text-xs font-semibold leading-4">Movement, measured differently.</span>
+    </div>
+  </figure>;
 }
 
 function SectionEyebrow({ children }: { children: ReactNode }) { return <div className="mb-4 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[.2em] text-[hsl(var(--secondary))]"><span className="h-px w-7 bg-[hsl(var(--accent))]" />{children}</div>; }
