@@ -7,14 +7,14 @@ import {
 
 const router: IRouter = Router();
 
-const categories = [
+const buildCategories = () => [
   {
     slug: "prosthetics",
     title: "Prosthetic solutions",
     titleArabic: "الأطراف الاصطناعية",
     description:
       "Confident movement, engineered around each person. From advanced knee joints to responsive carbon feet and bionic upper limbs.",
-    solutionCount: 8,
+    solutionCount: prostheticSolutions.length,
     accent: "cobalt",
   },
   {
@@ -23,7 +23,7 @@ const categories = [
     titleArabic: "الأجهزة التعويضية والتعديلية",
     description:
       "Thoughtful support for alignment, healing, and everyday independence — from spinal bracing to custom foot orthotics.",
-    solutionCount: 7,
+    solutionCount: orthoticSolutions.length,
     accent: "teal",
   },
 ];
@@ -175,10 +175,17 @@ const locations = [
   },
 ];
 
+const withCategorySlug = <T,>(solutions: T[], categorySlug: string) =>
+  solutions.map((solution) => ({ ...solution, categorySlug }));
+
+const prosthetics = withCategorySlug(prostheticSolutions, "prosthetics");
+const orthotics = withCategorySlug(orthoticSolutions, "orthotics");
+const categories = buildCategories();
+
 router.get("/catalog/overview", (_req, res) => {
   const data = GetCatalogOverviewResponse.parse({
     categories,
-    featuredSolutions: [...prostheticSolutions, ...orthoticSolutions].filter(
+    featuredSolutions: [...prosthetics, ...orthotics].filter(
       (solution) => solution.featured,
     ),
     metrics,
@@ -196,7 +203,7 @@ router.get("/catalog/categories/:slug", (req, res) => {
           title: "Prosthetic solutions",
           titleArabic: "الأطراف الاصطناعية",
           description: categories[0].description,
-          solutions: prostheticSolutions,
+          solutions: prosthetics,
           workflow: [
             "Understand your goals",
             "Scan, assess, and measure",
@@ -210,7 +217,7 @@ router.get("/catalog/categories/:slug", (req, res) => {
             title: "Orthotic solutions",
             titleArabic: "الأجهزة التعويضية والتعديلية",
             description: categories[1].description,
-            solutions: orthoticSolutions,
+            solutions: orthotics,
             workflow: [
               "Clinical assessment",
               "Digital capture and alignment",

@@ -60,7 +60,7 @@
   --destructive: 3 60% 48%;
   --destructive-foreground: 40 38% 98%;
   --app-font-sans: 'DM Sans', 'Noto Sans Arabic', sans-serif;
-  --app-font-serif: 'Instrument Serif', serif;
+  --app-font-serif: 'Instrument Serif', 'Noto Sans Arabic', serif;
   --app-font-mono: 'DM Sans', monospace;
   --radius: 1.15rem;
 }

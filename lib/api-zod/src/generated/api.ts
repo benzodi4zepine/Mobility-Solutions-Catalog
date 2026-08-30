@@ -38,7 +38,8 @@ export const GetCatalogOverviewResponse = zod.object({
   "description": zod.string(),
   "tags": zod.array(zod.string()),
   "imageKey": zod.string(),
-  "featured": zod.boolean()
+  "featured": zod.boolean(),
+  "categorySlug": zod.string().describe('Slug of the catalog category this solution belongs to.')
 })),
   "metrics": zod.array(zod.object({
   "value": zod.string(),
@@ -69,7 +70,8 @@ export const GetCatalogCategoryResponse = zod.object({
   "description": zod.string(),
   "tags": zod.array(zod.string()),
   "imageKey": zod.string(),
-  "featured": zod.boolean()
+  "featured": zod.boolean(),
+  "categorySlug": zod.string().describe('Slug of the catalog category this solution belongs to.')
 })),
   "workflow": zod.array(zod.string())
 })

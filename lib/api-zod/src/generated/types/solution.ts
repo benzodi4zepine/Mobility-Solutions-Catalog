@@ -15,4 +15,6 @@ export interface Solution {
   tags: string[];
   imageKey: string;
   featured: boolean;
+  /** Slug of the catalog category this solution belongs to. */
+  categorySlug: string;
 }

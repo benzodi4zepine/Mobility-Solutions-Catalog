@@ -195,6 +195,9 @@ components:
           type: string
         featured:
           type: boolean
+        categorySlug:
+          type: string
+          description: Slug of the catalog category this solution belongs to.
       required:
         - id
         - title
@@ -204,6 +207,7 @@ components:
         - tags
         - imageKey
         - featured
+        - categorySlug
     TrustMetric:
       type: object
       properties:

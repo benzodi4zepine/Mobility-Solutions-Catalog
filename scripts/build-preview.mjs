@@ -121,7 +121,10 @@ const shim = `
 
 const escape = (code) => code.replaceAll('</script', '<\\/script');
 
-const page = `<title>${title}</title>
+// The artifact host supplies a document skeleton, but this file is also opened
+// directly from disk — without a charset the Arabic content renders as mojibake.
+const page = `<meta charset="utf-8" />
+    <title>${title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     ${fontLinks}
     <style>${css}</style>
