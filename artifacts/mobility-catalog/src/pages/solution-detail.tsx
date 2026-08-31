@@ -5,6 +5,7 @@ import type { Solution } from '@workspace/api-client-react';
 import { useLanguage } from '@/i18n/language';
 import { Breadcrumbs } from '@/components/catalog/breadcrumbs';
 import { SolutionImage } from '@/components/catalog/solution-image';
+import { SolutionGallery } from '@/components/catalog/solution-gallery';
 
 /**
  * Shown where the clinic has not yet supplied clinical content. Specifications,
@@ -57,7 +58,7 @@ export function SolutionDetailBody() {
     ]} />
 
     <section className="grid gap-10 border-b border-[hsl(var(--border))] pb-14 lg:grid-cols-[1fr_1fr] lg:items-start">
-      <SolutionImage imageKey={solution.imageKey} title={title} large />
+      <SolutionGallery imageKey={solution.imageKey} title={title} />
       <div>
         <p dir="auto" className="text-[10px] font-bold uppercase tracking-[.16em] text-[hsl(var(--secondary))]">{solution.category}</p>
         <h1 className="mt-3 font-serif text-5xl leading-[.92] tracking-[-.03em] md:text-6xl" data-testid="text-solution-title">{title}</h1>
