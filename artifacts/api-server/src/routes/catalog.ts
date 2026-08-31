@@ -55,7 +55,7 @@ const prostheticSolutions = [
   {
     id: "revofit-sockets",
     title: "RevoFit & RevoLock sockets",
-    titleArabic: "تقنيات التجاويف القابلة للضبط",
+    titleArabic: "تقنيات الحاضنة القابلة للضبط",
     category: "Socket technology",
     description:
       "Micro-adjustable fit with BOA-style dials, suction, and suspension options.",
