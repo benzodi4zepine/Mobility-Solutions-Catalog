@@ -7,6 +7,8 @@
  */
 
 export interface ClinicLocation {
+  /** Public contact address for the clinic. */
+  email?: string;
   id: string;
   name: string;
   nameArabic: string;

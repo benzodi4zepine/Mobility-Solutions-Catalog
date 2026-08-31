@@ -170,6 +170,7 @@ const locations = [
     address: "Alrazi Street, Amman, Jordan",
     phone: "+962795185080",
     whatsapp: "962795185080",
+    email: "info@mafazmedical.com",
     hours: "Sat–Thu · 8:00–16:00",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Alrazi+Street%2C+Amman%2C+Jordan",
     isPrimary: true,

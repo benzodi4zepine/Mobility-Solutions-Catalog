@@ -278,6 +278,9 @@ components:
     ClinicLocation:
       type: object
       properties:
+        email:
+          type: string
+          description: Public contact address for the clinic.
         id:
           type: string
         name:

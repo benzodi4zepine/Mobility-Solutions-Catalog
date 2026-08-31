@@ -136,6 +136,7 @@ export const GetSolutionsResponse = zod.array(GetSolutionsResponseItem)
  * @summary Get clinic locations
  */
 export const GetLocationsResponseItem = zod.object({
+  "email": zod.string().optional().describe('Public contact address for the clinic.'),
   "id": zod.string(),
   "name": zod.string(),
   "nameArabic": zod.string(),
