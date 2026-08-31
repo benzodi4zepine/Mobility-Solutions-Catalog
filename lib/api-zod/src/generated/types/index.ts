@@ -11,6 +11,7 @@ export * from './catalogCategorySummary';
 export * from './catalogOverview';
 export * from './clinicLocation';
 export * from './healthStatus';
+export * from './product';
 export * from './referralInput';
 export * from './referralInputAreaOfNeed';
 export * from './referralInputPreferredContact';

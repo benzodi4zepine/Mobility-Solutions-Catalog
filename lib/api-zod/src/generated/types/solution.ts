@@ -5,6 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { Product } from './product';
 import type { SolutionSpec } from './solutionSpec';
 
 export interface Solution {
@@ -30,4 +31,6 @@ export interface Solution {
   /** Key specifications. Clinical content - never generated. */
   specs?: SolutionSpec[];
   relatedIds?: string[];
+  /** Individual models fitted under this solution. */
+  products: Product[];
 }

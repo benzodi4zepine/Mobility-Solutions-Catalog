@@ -238,6 +238,11 @@ components:
           type: array
           items:
             type: string
+        products:
+          type: array
+          description: Individual models fitted under this solution.
+          items:
+            $ref: "#/components/schemas/Product"
       required:
         - id
         - title
@@ -248,6 +253,34 @@ components:
         - imageKey
         - featured
         - categorySlug
+        - products
+    Product:
+      type: object
+      description: An individual model fitted under a solution.
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        nameArabic:
+          type: string
+        brand:
+          type: string
+        description:
+          type: string
+        descriptionArabic:
+          type: string
+        imageKey:
+          type: string
+          description: Matches a file in attached_assets/solutions/.
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - name
+        - imageKey
     SolutionSpec:
       type: object
       properties:

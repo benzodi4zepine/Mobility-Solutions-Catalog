@@ -25,6 +25,21 @@ export interface SolutionSpec {
   valueArabic?: string;
 }
 
+/**
+ * An individual model fitted under a solution.
+ */
+export interface Product {
+  id: string;
+  name: string;
+  nameArabic?: string;
+  brand?: string;
+  description?: string;
+  descriptionArabic?: string;
+  /** Matches a file in attached_assets/solutions/. */
+  imageKey: string;
+  tags?: string[];
+}
+
 export interface Solution {
   id: string;
   title: string;
@@ -48,6 +63,8 @@ export interface Solution {
   /** Key specifications. Clinical content - never generated. */
   specs?: SolutionSpec[];
   relatedIds?: string[];
+  /** Individual models fitted under this solution. */
+  products: Product[];
 }
 
 export interface TrustMetric {

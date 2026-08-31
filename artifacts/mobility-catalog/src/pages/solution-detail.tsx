@@ -1,7 +1,7 @@
 import { useParams, Link } from 'wouter';
 import { ArrowUpRight, MessageCircle, ShieldCheck } from 'lucide-react';
 import { useGetCatalogCategory, useGetLocations, useGetSolutions, getGetCatalogCategoryQueryKey, getGetLocationsQueryKey, getGetSolutionsQueryKey } from '@workspace/api-client-react';
-import type { Solution } from '@workspace/api-client-react';
+import type { Product, Solution } from '@workspace/api-client-react';
 import { useLanguage } from '@/i18n/language';
 import { usePageMeta } from '@/lib/page-meta';
 import { Breadcrumbs } from '@/components/catalog/breadcrumbs';
@@ -75,6 +75,25 @@ export function SolutionDetailBody() {
         </div>
       </div>
     </section>
+
+    {solution.products.length > 0 && <section className="border-b border-[hsl(var(--border))] py-14" data-testid="section-products">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <h2 className="font-serif text-3xl">{t('Models we fit', 'الموديلات التي نركّبها')}</h2>
+        <p className="text-sm text-[hsl(var(--muted-foreground))]">{t(`${solution.products.length} available`, `${solution.products.length} متوفّر`)}</p>
+      </div>
+      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {solution.products.map((product: Product) => <article key={product.id} className="flex flex-col rounded-[1.5rem] border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3" data-testid={`product-${product.id}`}>
+          <SolutionImage imageKey={product.imageKey} title={t(product.name, product.nameArabic || product.name)} />
+          <div className="flex flex-1 flex-col p-3">
+            {product.brand && <p dir="auto" className="text-[10px] font-bold uppercase tracking-[.14em] text-[hsl(var(--secondary))]">{product.brand}</p>}
+            <h3 dir="auto" className="mt-2 font-serif text-2xl leading-tight">{t(product.name, product.nameArabic || product.name)}</h3>
+            {product.description && <p dir="auto" className="mt-3 flex-1 text-sm leading-6 text-[hsl(var(--muted-foreground))]">{t(product.description, product.descriptionArabic || product.description)}</p>}
+            {product.tags && product.tags.length > 0 && <div className="mt-4 flex flex-wrap gap-2">{product.tags.map(tag => <span key={tag} dir="auto" className="rounded-full bg-[hsl(var(--muted))] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[.1em] text-[hsl(var(--muted-foreground))]">{tag}</span>)}</div>}
+            {whatsappHref && <a href={`${whatsappHref.split('?')[0]}?text=${encodeURIComponent(t(`Hello Mafaz, I would like to ask about: ${product.name}`, `مرحباً مفاز، أود الاستفسار عن: ${product.nameArabic || product.name}`))}`} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[hsl(var(--secondary))]" data-testid={`link-product-ask-${product.id}`}>{t('Ask about this model', 'اسأل عن هذا الموديل')} <ArrowUpRight size={14} /></a>}
+          </div>
+        </article>)}
+      </div>
+    </section>}
 
     <section className="grid gap-10 py-14 lg:grid-cols-[1fr_320px]">
       <div className="space-y-10">

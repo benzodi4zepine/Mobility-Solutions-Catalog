@@ -51,7 +51,17 @@ export const GetCatalogOverviewResponse = zod.object({
   "value": zod.string(),
   "valueArabic": zod.string().optional()
 })).optional().describe('Key specifications. Clinical content - never generated.'),
-  "relatedIds": zod.array(zod.string()).optional()
+  "relatedIds": zod.array(zod.string()).optional(),
+  "products": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "nameArabic": zod.string().optional(),
+  "brand": zod.string().optional(),
+  "description": zod.string().optional(),
+  "descriptionArabic": zod.string().optional(),
+  "imageKey": zod.string().describe('Matches a file in attached_assets\/solutions\/.'),
+  "tags": zod.array(zod.string()).optional()
+}).describe('An individual model fitted under a solution.')).describe('Individual models fitted under this solution.')
 })),
   "metrics": zod.array(zod.object({
   "value": zod.string(),
@@ -95,7 +105,17 @@ export const GetCatalogCategoryResponse = zod.object({
   "value": zod.string(),
   "valueArabic": zod.string().optional()
 })).optional().describe('Key specifications. Clinical content - never generated.'),
-  "relatedIds": zod.array(zod.string()).optional()
+  "relatedIds": zod.array(zod.string()).optional(),
+  "products": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "nameArabic": zod.string().optional(),
+  "brand": zod.string().optional(),
+  "description": zod.string().optional(),
+  "descriptionArabic": zod.string().optional(),
+  "imageKey": zod.string().describe('Matches a file in attached_assets\/solutions\/.'),
+  "tags": zod.array(zod.string()).optional()
+}).describe('An individual model fitted under a solution.')).describe('Individual models fitted under this solution.')
 })),
   "workflow": zod.array(zod.string())
 })
@@ -126,7 +146,17 @@ export const GetSolutionsResponseItem = zod.object({
   "value": zod.string(),
   "valueArabic": zod.string().optional()
 })).optional().describe('Key specifications. Clinical content - never generated.'),
-  "relatedIds": zod.array(zod.string()).optional()
+  "relatedIds": zod.array(zod.string()).optional(),
+  "products": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "nameArabic": zod.string().optional(),
+  "brand": zod.string().optional(),
+  "description": zod.string().optional(),
+  "descriptionArabic": zod.string().optional(),
+  "imageKey": zod.string().describe('Matches a file in attached_assets\/solutions\/.'),
+  "tags": zod.array(zod.string()).optional()
+}).describe('An individual model fitted under a solution.')).describe('Individual models fitted under this solution.')
 })
 export const GetSolutionsResponse = zod.array(GetSolutionsResponseItem)
 

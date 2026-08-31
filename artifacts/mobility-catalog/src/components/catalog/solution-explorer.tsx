@@ -24,7 +24,11 @@ function writeFilters(basePath: string, filters: Filters): string {
 
 function matches(solution: Solution, needle: string): boolean {
   if (!needle) return true;
-  const haystack = [solution.title, solution.titleArabic, solution.description, solution.descriptionArabic ?? '', solution.category, ...solution.tags].join(' ').toLowerCase();
+  const haystack = [
+    solution.title, solution.titleArabic, solution.description, solution.descriptionArabic ?? '',
+    solution.category, ...solution.tags,
+    ...solution.products.flatMap(product => [product.name, product.nameArabic ?? '', product.brand ?? '']),
+  ].join(' ').toLowerCase();
   return haystack.includes(needle);
 }
 
@@ -122,6 +126,7 @@ export function SolutionExplorer({ solutions, basePath }: { solutions: Solution[
               <div className="flex flex-1 flex-col p-3">
                 <p dir="auto" className="text-[10px] font-bold uppercase tracking-[.14em] text-[hsl(var(--secondary))]">{solution.category}</p>
                 <h3 className="mt-2 font-serif text-2xl leading-tight">{t(solution.title, solution.titleArabic)}</h3>
+                {solution.products.length > 0 && <p className="mt-1 text-xs font-semibold text-[hsl(var(--secondary))]" data-testid={`count-models-${solution.id}`}>{t(`${solution.products.length} models`, `${solution.products.length} موديلات`)}</p>}
                 <p dir="auto" className="mt-3 flex-1 text-sm leading-6 text-[hsl(var(--muted-foreground))]">{t(solution.description, solution.descriptionArabic || solution.description)}</p>
                 <span className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[hsl(var(--secondary))]">{t('View details', 'عرض التفاصيل')} <ArrowUpRight size={14} className="transition-transform group-hover:-translate-y-0.5" /></span>
               </div>

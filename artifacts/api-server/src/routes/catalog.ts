@@ -177,8 +177,47 @@ const locations = [
   },
 ];
 
-const withCategorySlug = <T,>(solutions: T[], categorySlug: string) =>
-  solutions.map((solution) => ({ ...solution, categorySlug }));
+type Product = {
+  id: string;
+  name: string;
+  nameArabic?: string;
+  brand?: string;
+  description?: string;
+  descriptionArabic?: string;
+  imageKey: string;
+  tags?: string[];
+};
+
+/**
+ * The individual models fitted under each solution, keyed by solution id.
+ *
+ * A solution such as "Microprocessor & smart knee joints" is a family; this is
+ * where the specific knees, feet, hands and braces Mafaz fits are listed. A
+ * solution with no entry here simply shows no model list, so the catalog reads
+ * exactly as before until models are added.
+ *
+ * Each model's `imageKey` maps to a file in attached_assets/solutions/ by the
+ * same filename convention the solutions use, e.g. imageKey "genium-x3" is
+ * served from genium-x3.jpg.
+ *
+ * Only list models the clinic actually fits, and keep descriptions to what the
+ * clinical team has approved - product claims are theirs to make, not ours.
+ */
+const productsBySolution: Record<string, Product[]> = {
+  // "smart-knees": [
+  //   { id: "example", name: "Model name", brand: "Ottobock", imageKey: "example", description: "One line the clinical team approves." },
+  // ],
+};
+
+const withCategorySlug = <T extends { id: string }>(
+  solutions: T[],
+  categorySlug: string,
+) =>
+  solutions.map((solution) => ({
+    ...solution,
+    categorySlug,
+    products: productsBySolution[solution.id] ?? [],
+  }));
 
 const prosthetics = withCategorySlug(prostheticSolutions, "prosthetics");
 const orthotics = withCategorySlug(orthoticSolutions, "orthotics");
