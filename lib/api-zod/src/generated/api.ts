@@ -185,7 +185,8 @@ export const CreateReferralResponse = zod.object({
   "id": zod.string(),
   "status": zod.string(),
   "message": zod.string(),
-  "receivedAt": zod.coerce.date()
+  "receivedAt": zod.coerce.date(),
+  "delivered": zod.boolean().describe('Whether the referral actually reached the clinic\'s inbox.')
 })
 
 

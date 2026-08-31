@@ -10,6 +10,15 @@ _Replace the heading above with the project's name, and this line with one sente
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
 - Required env: `DATABASE_URL` — Postgres connection string
+- Referral email (optional, but referrals are only emailed when set):
+  - `SMTP_URL` — e.g. `smtps://user:pass@smtp.example.com:465`, or set
+    `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` individually
+  - `REFERRAL_INBOX` — where referrals are delivered (defaults to
+    `info@mafazmedical.com`)
+  - `MAIL_FROM` — envelope sender, defaults to the inbox address
+  - With none of these set the API records referrals and reports
+    `delivered: false`, and the site asks the referrer to send on WhatsApp
+    instead, so a referral is never silently lost.
 
 ## Stack
 

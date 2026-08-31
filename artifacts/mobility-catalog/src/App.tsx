@@ -1,7 +1,7 @@
 import { type FormEvent, type ReactNode, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useCreateReferral, useGetCatalogCategory, useGetCatalogOverview, useGetLocations, useGetSolutions, useHealthCheck, getGetCatalogCategoryQueryKey, getGetCatalogOverviewQueryKey, getGetLocationsQueryKey, getGetSolutionsQueryKey, getHealthCheckQueryKey } from '@workspace/api-client-react';
-import { Activity, ArrowRight, ArrowUpRight, Check, ChevronRight, Clock3, FileText, HeartPulse, Languages, Mail, MapPin, Menu, MessageCircle, Phone, Play, ShieldCheck, Sparkles, Stethoscope, X } from 'lucide-react';
+import { Activity, ArrowRight, ArrowUpRight, Check, ChevronRight, Clock3, FileText, HeartPulse, Languages, Mail, MapPin, Menu, MessageCircle, Phone, Play, Send, ShieldCheck, Sparkles, Stethoscope, X } from 'lucide-react';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -243,7 +243,7 @@ function Referral() {
   const locations = useGetLocations({ query: { queryKey: getGetLocationsQueryKey(), staleTime: 300000 } });
   const clinic = locations.data?.find(location => location.isPrimary) ?? locations.data?.[0];
   const mutation = useCreateReferral();
-  const [sent, setSent] = useState<{ channel: 'whatsapp' | 'email'; url: string; body: string } | null>(null);
+  const [sent, setSent] = useState<{ delivered: boolean; body: string; reference?: string } | null>(null);
   const [error, setError] = useState('');
 
   const collect = (form: HTMLFormElement): ReferralPayload => {
@@ -262,7 +262,7 @@ function Referral() {
     };
   };
 
-  /** Plain-text summary the clinical team receives in WhatsApp or email. */
+  /** Plain-text summary, used for WhatsApp and as the copyable fallback. */
   const compose = (payload: ReferralPayload) => [
     t('New referral via the Mafaz website', 'إحالة جديدة عبر موقع مفاز'),
     '',
@@ -280,59 +280,56 @@ function Referral() {
     `${t('Notes', 'ملاحظات')}: ${payload.clinicalNotes}`,
   ].filter(Boolean).join('\n');
 
-  const handoff = (form: HTMLFormElement, channel: 'whatsapp' | 'email') => {
+  // The clinic's server sends the email, so a referrer needs no mail app.
+  const submit = (form: HTMLFormElement) => {
     setError('');
     if (!form.reportValidity()) return;
     const payload = collect(form);
     const body = compose(payload);
-    const number = clinic?.whatsapp?.replace(/\D/g, '');
-    const address = clinic?.email;
+    mutation.mutate({ data: payload }, {
+      onSuccess: result => setSent({ delivered: Boolean(result.delivered), body, reference: result.id }),
+      onError: () => setSent({ delivered: false, body }),
+    });
+  };
 
-    if (channel === 'whatsapp' && !number) { setError(t('The WhatsApp line is unavailable right now. Please call the clinic instead.', 'خط واتساب غير متاح حالياً. يرجى الاتصال بالعيادة.')); return; }
-    if (channel === 'email' && !address) { setError(t('The email address is unavailable right now. Please call the clinic instead.', 'البريد الإلكتروني غير متاح حالياً. يرجى الاتصال بالعيادة.')); return; }
+  const whatsappHref = clinic?.whatsapp ? `https://wa.me/${clinic.whatsapp.replace(/\D/g, '')}` : null;
 
-    const url = channel === 'whatsapp'
-      ? `https://wa.me/${number}?text=${encodeURIComponent(body)}`
-      : `mailto:${address}?subject=${encodeURIComponent(t('Patient referral', 'إحالة مريض'))}&body=${encodeURIComponent(body)}`;
-
-    // Keep a record for the clinic, but never let it block reaching a human.
-    mutation.mutate({ data: payload }, { onError: () => undefined });
-
-    openExternal(url, channel === 'whatsapp');
-    setSent({ channel, url, body });
+  const sendOnWhatsApp = (form: HTMLFormElement) => {
+    setError('');
+    if (!form.reportValidity()) return;
+    if (!whatsappHref) { setError(t('The WhatsApp line is unavailable right now. Please call the clinic instead.', 'خط واتساب غير متاح حالياً. يرجى الاتصال بالعيادة.')); return; }
+    const body = compose(collect(form));
+    openExternal(`${whatsappHref}?text=${encodeURIComponent(body)}`, true);
+    setSent({ delivered: false, body });
   };
 
   if (sent) return <Shell><main className="page-in mx-auto flex max-w-3xl flex-col items-center px-5 py-20 text-center lg:py-28">
-    <div className="grid size-20 place-items-center rounded-full bg-[hsl(var(--secondary)/.14)] text-[hsl(var(--secondary))]"><Check size={34} /></div>
-    <SectionEyebrow>{t('Almost there', 'أوشكت على الانتهاء')}</SectionEyebrow>
-    <h1 className="font-serif text-6xl leading-[.9]">{t('One last tap.', 'نقرة أخيرة.')}</h1>
-    <p className="mt-6 max-w-md text-base leading-7 text-[hsl(var(--muted-foreground))]">
-      {sent.channel === 'whatsapp'
-        ? t('We opened WhatsApp with your referral ready to go. Press send there and the clinical team will have it.', 'فتحنا واتساب وإحالتك جاهزة للإرسال. اضغط إرسال هناك ليصل الطلب إلى الفريق السريري.')
-        : t('We opened your email app with the referral ready to go. Press send there and the clinical team will have it.', 'فتحنا تطبيق البريد وإحالتك جاهزة للإرسال. اضغط إرسال هناك ليصل الطلب إلى الفريق السريري.')}
+    <div className={`grid size-20 place-items-center rounded-full ${sent.delivered ? 'bg-[hsl(var(--secondary)/.14)] text-[hsl(var(--secondary))]' : 'bg-[hsl(var(--accent)/.14)] text-[hsl(var(--accent))]'}`}><Check size={34} /></div>
+    <SectionEyebrow>{sent.delivered ? t('Referral sent', 'تم إرسال الإحالة') : t('Almost there', 'أوشكت على الانتهاء')}</SectionEyebrow>
+    <h1 className="font-serif text-6xl leading-[.9]">{sent.delivered ? t('It reached the team.', 'وصلت إلى الفريق.') : t('One last step.', 'خطوة أخيرة.')}</h1>
+    <p className="mt-6 max-w-md text-base leading-7 text-[hsl(var(--muted-foreground))]" data-testid="text-referral-outcome">
+      {sent.delivered
+        ? t('Your referral is with the clinical team. Most referrals receive a response within one working day.', 'إحالتك الآن لدى الفريق السريري. تتلقى معظم الإحالات رداً خلال يوم عمل واحد.')
+        : t('We could not deliver it automatically from here. Send it on WhatsApp, or copy it below and email it — it takes a moment and nothing is lost.', 'تعذّر إرسالها تلقائياً من هنا. أرسلها عبر واتساب، أو انسخها أدناه وأرسلها بالبريد — لن يضيع شيء.')}
     </p>
-    <a href={sent.url} target={sent.channel === 'whatsapp' ? '_blank' : undefined} rel="noreferrer" className="mt-7 inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))] px-6 py-3.5 text-sm font-bold text-[hsl(var(--primary-foreground))]" data-testid="link-retry-handoff">
-      {sent.channel === 'whatsapp' ? <MessageCircle size={16} /> : <Mail size={16} />}
-      {sent.channel === 'whatsapp' ? t('Open WhatsApp again', 'افتح واتساب مرة أخرى') : t('Open email again', 'افتح البريد مرة أخرى')}
-    </a>
+    {sent.delivered && sent.reference && <div className="mt-8 rounded-full border border-[hsl(var(--border))] px-5 py-3 font-mono text-[11px] tracking-[.08em]" dir="ltr" data-testid="text-reference">REF / {sent.reference}</div>}
 
-    <section className="mt-12 w-full rounded-[1.4rem] border border-[hsl(var(--border))] bg-[hsl(var(--card)/.6)] p-5 text-start sm:p-6">
+    {!sent.delivered && <section className="mt-10 w-full rounded-[1.4rem] border border-[hsl(var(--border))] bg-[hsl(var(--card)/.6)] p-5 text-start sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm font-bold">{t('Nothing opened?', 'لم يُفتح شيء؟')}</p>
+        <p className="text-sm font-bold">{t('Send it yourself', 'أرسلها بنفسك')}</p>
         <CopyButton text={sent.body} />
       </div>
-      <p className="mt-2 text-xs leading-5 text-[hsl(var(--muted-foreground))]">{t('Some browsers block apps from opening automatically. Copy the referral below and send it to us however suits you.', 'تمنع بعض المتصفحات فتح التطبيقات تلقائياً. انسخ الإحالة أدناه وأرسلها إلينا بالطريقة التي تناسبك.')}</p>
       <textarea readOnly value={sent.body} rows={11} dir="auto" data-testid="textarea-referral-text" className="mt-4 w-full resize-y rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 font-mono text-[11px] leading-5 outline-none" />
       <div className="mt-4 flex flex-wrap gap-3">
-        {clinic?.whatsapp && <a href={`https://wa.me/${clinic.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-full border border-[hsl(var(--border))] px-4 py-2.5 text-xs font-bold" data-testid="link-confirm-whatsapp"><MessageCircle size={14} /> {clinic.phone}</a>}
-        {clinic?.email && <a href={`mailto:${clinic.email}`} dir="ltr" className="flex items-center gap-2 rounded-full border border-[hsl(var(--border))] px-4 py-2.5 text-xs font-bold" data-testid="link-confirm-email"><Mail size={14} /> {clinic.email}</a>}
+        {whatsappHref && <a href={`${whatsappHref}?text=${encodeURIComponent(sent.body)}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-full bg-[hsl(var(--primary))] px-4 py-2.5 text-xs font-bold text-[hsl(var(--primary-foreground))]" data-testid="link-confirm-whatsapp"><MessageCircle size={14} /> {t('Send on WhatsApp', 'أرسل عبر واتساب')}</a>}
+        {clinic?.email && <a href={`mailto:${clinic.email}?subject=${encodeURIComponent(t('Patient referral', 'إحالة مريض'))}&body=${encodeURIComponent(sent.body)}`} dir="ltr" className="flex items-center gap-2 rounded-full border border-[hsl(var(--border))] px-4 py-2.5 text-xs font-bold" data-testid="link-confirm-email"><Mail size={14} /> {clinic.email}</a>}
       </div>
-    </section>
+    </section>}
 
     <Link href="/" className="mt-10 inline-flex items-center gap-2 text-sm font-bold text-[hsl(var(--secondary))]" data-testid="link-referral-home">{t('Return to Mafaz', 'العودة إلى مفاز')} <ArrowRight size={16} className="rtl:rotate-180" /></Link>
   </main></Shell>;
 
-  return <Shell><main className="page-in mx-auto max-w-7xl px-5 py-14 lg:px-10 lg:py-20"><div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]"><div className="lg:pt-8"><SectionEyebrow>{t('Private clinical line', 'خط سريري خاص')}</SectionEyebrow><h1 className="font-serif text-6xl leading-[.88] tracking-[-.04em] md:text-7xl">{t('Let’s make', 'لنضع')}<br /><i className="text-[hsl(var(--secondary))]">{t('a plan.', 'خطة.')}</i></h1><p className="mt-7 max-w-sm text-sm leading-6 text-[hsl(var(--muted-foreground))]">{t('A few details help us prepare the right first conversation. No referral jargon required.', 'بعض التفاصيل تساعدنا على تحضير المحادثة الأولى المناسبة. لا حاجة للمصطلحات المعقدة.')}</p><div className="mt-10 space-y-4 border-t border-[hsl(var(--border))] pt-6 text-xs text-[hsl(var(--muted-foreground))]"><div className="flex gap-3"><ShieldCheck size={17} className="shrink-0 text-[hsl(var(--secondary))]" /><span>{t('Your details go straight to the clinical team on WhatsApp or by email — you press send yourself.', 'تصل بياناتك مباشرة إلى الفريق السريري عبر واتساب أو البريد — أنت من يضغط إرسال.')}</span></div><div className="flex gap-3"><Clock3 size={17} className="shrink-0 text-[hsl(var(--secondary))]" /><span>{t('Most referrals receive a response within one working day.', 'تتلقى معظم الإحالات رداً خلال يوم عمل واحد.')}</span></div>{clinic?.email && <div className="flex gap-3"><Mail size={17} className="shrink-0 text-[hsl(var(--secondary))]" /><a href={`mailto:${clinic.email}`} className="hover:text-[hsl(var(--secondary))]" dir="ltr" data-testid="link-referral-email">{clinic.email}</a></div>}</div></div><form onSubmit={event => { event.preventDefault(); handoff(event.currentTarget, 'whatsapp'); }} className="rounded-[1.6rem] border border-[hsl(var(--border))] bg-[hsl(var(--card)/.68)] p-5 shadow-[0_20px_60px_hsl(var(--primary)/.05)] sm:p-8" data-testid="form-referral"><div className="mb-8 flex items-center justify-between border-b border-[hsl(var(--border))] pb-5"><div><h2 className="font-serif text-3xl">{t('Referral details', 'بيانات الإحالة')}</h2>{referredSolution && <p className="mt-2 text-xs text-[hsl(var(--secondary))]" data-testid="text-referral-context">{t('Regarding', 'بخصوص')}: {t(referredSolution.title, referredSolution.titleArabic)}</p>}</div><FileText className="text-[hsl(var(--secondary))]" size={22} /></div><div className="grid gap-5 sm:grid-cols-2"><Field label={t('Your name', 'اسمك')} required><input name="referrerName" required minLength={2} className={inputClass} placeholder={t('Dr. / Ms. / Mr.', 'د. / السيدة / السيد')} data-testid="input-referrer-name" /></Field><Field label={t('Organization', 'الجهة')} required><input name="organization" required minLength={2} className={inputClass} placeholder={t('Clinic or therapy centre', 'عيادة أو مركز علاجي')} data-testid="input-organization" /></Field><Field label={t('Phone', 'الهاتف')} required><input name="phone" required minLength={5} type="tel" dir="ltr" className={inputClass} placeholder="+962 79 000 0000" data-testid="input-phone" /></Field><Field label={t('Email', 'البريد الإلكتروني')}><input name="email" type="email" dir="ltr" className={inputClass} placeholder="name@clinic.com" data-testid="input-email" /></Field><Field label={t('Patient name', 'اسم المريض')} required><input name="patientName" required minLength={2} className={inputClass} placeholder={t('Full name', 'الاسم الكامل')} data-testid="input-patient-name" /></Field><Field label={t('Patient age', 'العمر')}><input name="patientAge" type="number" min="0" max="120" className={inputClass} placeholder={t('Optional', 'اختياري')} data-testid="input-patient-age" /></Field></div><div className="mt-6 grid gap-5 sm:grid-cols-2"><Field label={t('Area of need', 'مجال الاحتياج')} required><select name="areaOfNeed" required key={defaultArea} defaultValue={defaultArea} className={inputClass} data-testid="select-area"><option value="prosthetics">{t('Prosthetics', 'الأطراف الاصطناعية')}</option><option value="orthotics">{t('Orthotics', 'الأجهزة التقويمية')}</option><option value="other">{t('Other', 'أخرى')}</option></select></Field><Field label={t('Preferred contact', 'طريقة التواصل المفضلة')} required><select name="preferredContact" required defaultValue="phone" className={inputClass} data-testid="select-contact"><option value="phone">{t('Phone', 'الهاتف')}</option><option value="whatsapp">{t('WhatsApp', 'واتساب')}</option><option value="email">{t('Email', 'البريد الإلكتروني')}</option></select></Field></div><div className="mt-6"><Field label={t('What would help us understand?', 'ما الذي يساعدنا على الفهم؟')} required><textarea name="clinicalNotes" required minLength={10} rows={5} className={inputClass} placeholder={t('A short note about the clinical context, goals, or timing...', 'ملاحظة قصيرة عن السياق السريري أو الأهداف أو التوقيت...')} data-testid="input-clinical-notes" /></Field></div>{error && <p className="mt-5 rounded-xl bg-[hsl(var(--accent)/.12)] px-4 py-3 text-sm text-[hsl(var(--foreground))]" role="alert" data-testid="error-referral">{error}</p>}<button type="submit" className="mt-7 flex w-full items-center justify-center gap-2 rounded-full bg-[hsl(var(--primary))] px-6 py-4 text-sm font-bold text-[hsl(var(--primary-foreground))] transition hover:-translate-y-0.5" data-testid="button-submit-referral"><MessageCircle size={16} /> {t('Send on WhatsApp', 'أرسل عبر واتساب')}</button><button type="button" onClick={event => handoff(event.currentTarget.form as HTMLFormElement, 'email')} className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-[hsl(var(--border))] px-6 py-4 text-sm font-bold transition hover:border-[hsl(var(--secondary))] hover:text-[hsl(var(--secondary))]" data-testid="button-submit-referral-email"><Mail size={16} /> {t('Send by email instead', 'أرسل عبر البريد الإلكتروني')}</button><p className="mt-4 text-center text-[11px] leading-5 text-[hsl(var(--muted-foreground))]">{t('This opens WhatsApp or your email app with the referral filled in. You press send.', 'يفتح هذا واتساب أو تطبيق البريد مع تعبئة الإحالة. أنت من يضغط إرسال.')}</p></form></div></main></Shell>;
+  return <Shell><main className="page-in mx-auto max-w-7xl px-5 py-14 lg:px-10 lg:py-20"><div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]"><div className="lg:pt-8"><SectionEyebrow>{t('Private clinical line', 'خط سريري خاص')}</SectionEyebrow><h1 className="font-serif text-6xl leading-[.88] tracking-[-.04em] md:text-7xl">{t('Let’s make', 'لنضع')}<br /><i className="text-[hsl(var(--secondary))]">{t('a plan.', 'خطة.')}</i></h1><p className="mt-7 max-w-sm text-sm leading-6 text-[hsl(var(--muted-foreground))]">{t('A few details help us prepare the right first conversation. No referral jargon required.', 'بعض التفاصيل تساعدنا على تحضير المحادثة الأولى المناسبة. لا حاجة للمصطلحات المعقدة.')}</p><div className="mt-10 space-y-4 border-t border-[hsl(var(--border))] pt-6 text-xs text-[hsl(var(--muted-foreground))]"><div className="flex gap-3"><ShieldCheck size={17} className="shrink-0 text-[hsl(var(--secondary))]" /><span>{t('Your details go straight to the clinical team.', 'تصل بياناتك مباشرة إلى الفريق السريري.')}</span></div><div className="flex gap-3"><Clock3 size={17} className="shrink-0 text-[hsl(var(--secondary))]" /><span>{t('Most referrals receive a response within one working day.', 'تتلقى معظم الإحالات رداً خلال يوم عمل واحد.')}</span></div>{clinic?.email && <div className="flex gap-3"><Mail size={17} className="shrink-0 text-[hsl(var(--secondary))]" /><a href={`mailto:${clinic.email}`} className="hover:text-[hsl(var(--secondary))]" dir="ltr" data-testid="link-referral-email">{clinic.email}</a></div>}{clinic?.phone && <div className="flex gap-3"><Phone size={17} className="shrink-0 text-[hsl(var(--secondary))]" /><a href={`tel:${clinic.phone}`} className="hover:text-[hsl(var(--secondary))]" dir="ltr" data-testid="link-referral-phone">{clinic.phone}</a></div>}</div></div><form onSubmit={event => { event.preventDefault(); submit(event.currentTarget); }} className="rounded-[1.6rem] border border-[hsl(var(--border))] bg-[hsl(var(--card)/.68)] p-5 shadow-[0_20px_60px_hsl(var(--primary)/.05)] sm:p-8" data-testid="form-referral"><div className="mb-8 flex items-center justify-between border-b border-[hsl(var(--border))] pb-5"><div><h2 className="font-serif text-3xl">{t('Referral details', 'بيانات الإحالة')}</h2>{referredSolution && <p className="mt-2 text-xs text-[hsl(var(--secondary))]" data-testid="text-referral-context">{t('Regarding', 'بخصوص')}: {t(referredSolution.title, referredSolution.titleArabic)}</p>}</div><FileText className="text-[hsl(var(--secondary))]" size={22} /></div><div className="grid gap-5 sm:grid-cols-2"><Field label={t('Your name', 'اسمك')} required><input name="referrerName" required minLength={2} className={inputClass} placeholder={t('Dr. / Ms. / Mr.', 'د. / السيدة / السيد')} data-testid="input-referrer-name" /></Field><Field label={t('Organization', 'الجهة')} required><input name="organization" required minLength={2} className={inputClass} placeholder={t('Clinic or therapy centre', 'عيادة أو مركز علاجي')} data-testid="input-organization" /></Field><Field label={t('Phone', 'الهاتف')} required><input name="phone" required minLength={5} type="tel" dir="ltr" className={inputClass} placeholder="+962 79 000 0000" data-testid="input-phone" /></Field><Field label={t('Email', 'البريد الإلكتروني')}><input name="email" type="email" dir="ltr" className={inputClass} placeholder="name@clinic.com" data-testid="input-email" /></Field><Field label={t('Patient name', 'اسم المريض')} required><input name="patientName" required minLength={2} className={inputClass} placeholder={t('Full name', 'الاسم الكامل')} data-testid="input-patient-name" /></Field><Field label={t('Patient age', 'العمر')}><input name="patientAge" type="number" min="0" max="120" className={inputClass} placeholder={t('Optional', 'اختياري')} data-testid="input-patient-age" /></Field></div><div className="mt-6 grid gap-5 sm:grid-cols-2"><Field label={t('Area of need', 'مجال الاحتياج')} required><select name="areaOfNeed" required key={defaultArea} defaultValue={defaultArea} className={inputClass} data-testid="select-area"><option value="prosthetics">{t('Prosthetics', 'الأطراف الاصطناعية')}</option><option value="orthotics">{t('Orthotics', 'الأجهزة التقويمية')}</option><option value="other">{t('Other', 'أخرى')}</option></select></Field><Field label={t('Preferred contact', 'طريقة التواصل المفضلة')} required><select name="preferredContact" required defaultValue="phone" className={inputClass} data-testid="select-contact"><option value="phone">{t('Phone', 'الهاتف')}</option><option value="whatsapp">{t('WhatsApp', 'واتساب')}</option><option value="email">{t('Email', 'البريد الإلكتروني')}</option></select></Field></div><div className="mt-6"><Field label={t('What would help us understand?', 'ما الذي يساعدنا على الفهم؟')} required><textarea name="clinicalNotes" required minLength={10} rows={5} className={inputClass} placeholder={t('A short note about the clinical context, goals, or timing...', 'ملاحظة قصيرة عن السياق السريري أو الأهداف أو التوقيت...')} data-testid="input-clinical-notes" /></Field></div>{error && <p className="mt-5 rounded-xl bg-[hsl(var(--accent)/.12)] px-4 py-3 text-sm text-[hsl(var(--foreground))]" role="alert" data-testid="error-referral">{error}</p>}<button type="submit" disabled={mutation.isPending} className="mt-7 flex w-full items-center justify-center gap-2 rounded-full bg-[hsl(var(--primary))] px-6 py-4 text-sm font-bold text-[hsl(var(--primary-foreground))] transition hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-65" data-testid="button-submit-referral">{mutation.isPending ? t('Sending…', 'جارٍ الإرسال…') : t('Send referral', 'إرسال الإحالة')}<Send size={16} className="rtl:rotate-180" /></button><button type="button" onClick={event => sendOnWhatsApp(event.currentTarget.form as HTMLFormElement)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-[hsl(var(--border))] px-6 py-4 text-sm font-bold transition hover:border-[hsl(var(--secondary))] hover:text-[hsl(var(--secondary))]" data-testid="button-submit-referral-whatsapp"><MessageCircle size={16} /> {t('Send on WhatsApp instead', 'أرسل عبر واتساب بدلاً من ذلك')}</button></form></div></main></Shell>;
 }
 
 function Contact() {

@@ -359,9 +359,13 @@ components:
         receivedAt:
           type: string
           format: date-time
+        delivered:
+          type: boolean
+          description: Whether the referral actually reached the clinic's inbox.
       required:
         - id
         - status
         - message
         - receivedAt
+        - delivered
 

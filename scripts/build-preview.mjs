@@ -110,8 +110,9 @@ const shim = `
       return Promise.resolve(json({
         id,
         status: 'received',
-        message: 'Preview mode — this referral was not sent. On the live site our clinical team would be in touch shortly.',
+        message: 'Preview mode — this referral was not sent.',
         receivedAt: new Date().toISOString(),
+        delivered: false,
       }, 201));
     }
     if (pathname in snapshot) return Promise.resolve(json(snapshot[pathname], 200));

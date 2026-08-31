@@ -11,4 +11,6 @@ export interface ReferralReceipt {
   status: string;
   message: string;
   receivedAt: Date;
+  /** Whether the referral actually reached the clinic's inbox. */
+  delivered: boolean;
 }
