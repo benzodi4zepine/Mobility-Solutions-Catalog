@@ -39,6 +39,7 @@ const SNAPSHOT_PATHS = [
   '/catalog/overview',
   '/catalog/categories/prosthetics',
   '/catalog/categories/orthotics',
+  '/catalog/solutions',
   '/locations',
 ];
 

@@ -5,6 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { SolutionSpec } from './solutionSpec';
 
 export interface Solution {
   id: string;
@@ -17,4 +18,16 @@ export interface Solution {
   featured: boolean;
   /** Slug of the catalog category this solution belongs to. */
   categorySlug: string;
+  /** Arabic translation of description. Supplied by the clinic. */
+  descriptionArabic?: string;
+  /** Full prose for the solution detail page. Supplied by the clinic. */
+  longDescription?: string;
+  longDescriptionArabic?: string;
+  /** Manufacturer or brand, where applicable. */
+  brand?: string;
+  /** Who this solution is for. Clinical content - never generated. */
+  indications?: string[];
+  /** Key specifications. Clinical content - never generated. */
+  specs?: SolutionSpec[];
+  relatedIds?: string[];
 }

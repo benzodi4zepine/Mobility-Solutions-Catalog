@@ -62,6 +62,21 @@ paths:
                 $ref: "#/components/schemas/CatalogCategory"
         "404":
           description: Category not found
+  /catalog/solutions:
+    get:
+      operationId: getSolutions
+      tags: [catalog]
+      summary: Get every catalog solution
+      description: Returns all solutions across every category, for search and filtering.
+      responses:
+        "200":
+          description: Catalog solutions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Solution"
   /locations:
     get:
       operationId: getLocations
@@ -198,6 +213,31 @@ components:
         categorySlug:
           type: string
           description: Slug of the catalog category this solution belongs to.
+        descriptionArabic:
+          type: string
+          description: Arabic translation of description. Supplied by the clinic.
+        longDescription:
+          type: string
+          description: Full prose for the solution detail page. Supplied by the clinic.
+        longDescriptionArabic:
+          type: string
+        brand:
+          type: string
+          description: Manufacturer or brand, where applicable.
+        indications:
+          type: array
+          description: Who this solution is for. Clinical content - never generated.
+          items:
+            type: string
+        specs:
+          type: array
+          description: Key specifications. Clinical content - never generated.
+          items:
+            $ref: "#/components/schemas/SolutionSpec"
+        relatedIds:
+          type: array
+          items:
+            type: string
       required:
         - id
         - title
@@ -208,6 +248,20 @@ components:
         - imageKey
         - featured
         - categorySlug
+    SolutionSpec:
+      type: object
+      properties:
+        label:
+          type: string
+        labelArabic:
+          type: string
+        value:
+          type: string
+        valueArabic:
+          type: string
+      required:
+        - label
+        - value
     TrustMetric:
       type: object
       properties:

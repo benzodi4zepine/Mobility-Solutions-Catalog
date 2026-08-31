@@ -16,4 +16,5 @@ export * from './referralInputAreaOfNeed';
 export * from './referralInputPreferredContact';
 export * from './referralReceipt';
 export * from './solution';
+export * from './solutionSpec';
 export * from './trustMetric';

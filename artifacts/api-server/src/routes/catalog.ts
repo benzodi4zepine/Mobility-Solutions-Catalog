@@ -3,6 +3,7 @@ import {
   GetCatalogCategoryResponse,
   GetCatalogOverviewResponse,
   GetLocationsResponse,
+  GetSolutionsResponse,
 } from "@workspace/api-zod";
 
 const router: IRouter = Router();
@@ -233,6 +234,10 @@ router.get("/catalog/categories/:slug", (req, res) => {
   }
 
   res.json(GetCatalogCategoryResponse.parse(category));
+});
+
+router.get("/catalog/solutions", (_req, res) => {
+  res.json(GetSolutionsResponse.parse([...prosthetics, ...orthotics]));
 });
 
 router.get("/locations", (_req, res) => {

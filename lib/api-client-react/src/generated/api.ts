@@ -25,7 +25,8 @@ import type {
   ClinicLocation,
   HealthStatus,
   ReferralInput,
-  ReferralReceipt
+  ReferralReceipt,
+  Solution
 } from './api.schemas';
 
 import { customFetch } from '../custom-fetch';
@@ -277,6 +278,84 @@ export function useGetCatalogCategory<TData = Awaited<ReturnType<typeof getCatal
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getGetCatalogCategoryQueryOptions(slug,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetSolutionsUrl = () => {
+
+
+
+
+  return `/api/catalog/solutions`
+}
+
+/**
+ * Returns all solutions across every category, for search and filtering.
+ * @summary Get every catalog solution
+ */
+export const getSolutions = async ( options?: Parameters<typeof customFetch>[1]): Promise<Solution[]> => {
+
+  return customFetch<Solution[]>(getGetSolutionsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetSolutionsQueryKey = () => {
+    return [
+    `/api/catalog/solutions`
+    ] as const;
+    }
+
+
+export const getGetSolutionsQueryOptions = <TData = Awaited<ReturnType<typeof getSolutions>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getSolutions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSolutionsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSolutions>>> = ({ signal }) => getSolutions({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSolutions>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSolutionsQueryResult = NonNullable<Awaited<ReturnType<typeof getSolutions>>>
+export type GetSolutionsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get every catalog solution
+ */
+
+export function useGetSolutions<TData = Awaited<ReturnType<typeof getSolutions>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getSolutions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSolutionsQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

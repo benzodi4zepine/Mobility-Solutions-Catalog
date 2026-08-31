@@ -39,7 +39,19 @@ export const GetCatalogOverviewResponse = zod.object({
   "tags": zod.array(zod.string()),
   "imageKey": zod.string(),
   "featured": zod.boolean(),
-  "categorySlug": zod.string().describe('Slug of the catalog category this solution belongs to.')
+  "categorySlug": zod.string().describe('Slug of the catalog category this solution belongs to.'),
+  "descriptionArabic": zod.string().optional().describe('Arabic translation of description. Supplied by the clinic.'),
+  "longDescription": zod.string().optional().describe('Full prose for the solution detail page. Supplied by the clinic.'),
+  "longDescriptionArabic": zod.string().optional(),
+  "brand": zod.string().optional().describe('Manufacturer or brand, where applicable.'),
+  "indications": zod.array(zod.string()).optional().describe('Who this solution is for. Clinical content - never generated.'),
+  "specs": zod.array(zod.object({
+  "label": zod.string(),
+  "labelArabic": zod.string().optional(),
+  "value": zod.string(),
+  "valueArabic": zod.string().optional()
+})).optional().describe('Key specifications. Clinical content - never generated.'),
+  "relatedIds": zod.array(zod.string()).optional()
 })),
   "metrics": zod.array(zod.object({
   "value": zod.string(),
@@ -71,10 +83,52 @@ export const GetCatalogCategoryResponse = zod.object({
   "tags": zod.array(zod.string()),
   "imageKey": zod.string(),
   "featured": zod.boolean(),
-  "categorySlug": zod.string().describe('Slug of the catalog category this solution belongs to.')
+  "categorySlug": zod.string().describe('Slug of the catalog category this solution belongs to.'),
+  "descriptionArabic": zod.string().optional().describe('Arabic translation of description. Supplied by the clinic.'),
+  "longDescription": zod.string().optional().describe('Full prose for the solution detail page. Supplied by the clinic.'),
+  "longDescriptionArabic": zod.string().optional(),
+  "brand": zod.string().optional().describe('Manufacturer or brand, where applicable.'),
+  "indications": zod.array(zod.string()).optional().describe('Who this solution is for. Clinical content - never generated.'),
+  "specs": zod.array(zod.object({
+  "label": zod.string(),
+  "labelArabic": zod.string().optional(),
+  "value": zod.string(),
+  "valueArabic": zod.string().optional()
+})).optional().describe('Key specifications. Clinical content - never generated.'),
+  "relatedIds": zod.array(zod.string()).optional()
 })),
   "workflow": zod.array(zod.string())
 })
+
+
+/**
+ * Returns all solutions across every category, for search and filtering.
+ * @summary Get every catalog solution
+ */
+export const GetSolutionsResponseItem = zod.object({
+  "id": zod.string(),
+  "title": zod.string(),
+  "titleArabic": zod.string(),
+  "category": zod.string(),
+  "description": zod.string(),
+  "tags": zod.array(zod.string()),
+  "imageKey": zod.string(),
+  "featured": zod.boolean(),
+  "categorySlug": zod.string().describe('Slug of the catalog category this solution belongs to.'),
+  "descriptionArabic": zod.string().optional().describe('Arabic translation of description. Supplied by the clinic.'),
+  "longDescription": zod.string().optional().describe('Full prose for the solution detail page. Supplied by the clinic.'),
+  "longDescriptionArabic": zod.string().optional(),
+  "brand": zod.string().optional().describe('Manufacturer or brand, where applicable.'),
+  "indications": zod.array(zod.string()).optional().describe('Who this solution is for. Clinical content - never generated.'),
+  "specs": zod.array(zod.object({
+  "label": zod.string(),
+  "labelArabic": zod.string().optional(),
+  "value": zod.string(),
+  "valueArabic": zod.string().optional()
+})).optional().describe('Key specifications. Clinical content - never generated.'),
+  "relatedIds": zod.array(zod.string()).optional()
+})
+export const GetSolutionsResponse = zod.array(GetSolutionsResponseItem)
 
 
 /**

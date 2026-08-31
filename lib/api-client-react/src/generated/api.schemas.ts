@@ -18,6 +18,13 @@ export interface CatalogCategorySummary {
   accent: string;
 }
 
+export interface SolutionSpec {
+  label: string;
+  labelArabic?: string;
+  value: string;
+  valueArabic?: string;
+}
+
 export interface Solution {
   id: string;
   title: string;
@@ -29,6 +36,18 @@ export interface Solution {
   featured: boolean;
   /** Slug of the catalog category this solution belongs to. */
   categorySlug: string;
+  /** Arabic translation of description. Supplied by the clinic. */
+  descriptionArabic?: string;
+  /** Full prose for the solution detail page. Supplied by the clinic. */
+  longDescription?: string;
+  longDescriptionArabic?: string;
+  /** Manufacturer or brand, where applicable. */
+  brand?: string;
+  /** Who this solution is for. Clinical content - never generated. */
+  indications?: string[];
+  /** Key specifications. Clinical content - never generated. */
+  specs?: SolutionSpec[];
+  relatedIds?: string[];
 }
 
 export interface TrustMetric {
