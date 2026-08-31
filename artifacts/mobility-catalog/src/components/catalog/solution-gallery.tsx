@@ -15,7 +15,7 @@ export function SolutionGallery({ imageKey, title }: { imageKey: string; title: 
   if (images.length === 0) return <SolutionImage imageKey={imageKey} title={title} large />;
 
   return <div data-testid={`gallery-${imageKey}`}>
-    <img src={images[Math.min(active, images.length - 1)]} alt={t(`${title} — view ${active + 1} of ${images.length}`, `${title} — صورة ${active + 1} من ${images.length}`)}
+    <img src={images[Math.min(active, images.length - 1)]} alt={images.length > 1 ? t(`${title} — view ${active + 1} of ${images.length}`, `${title} — صورة ${active + 1} من ${images.length}`) : title}
       width={1000} height={1000} className="aspect-square w-full rounded-[1.4rem] bg-[hsl(var(--muted)/.4)] object-contain" data-testid={`image-product-${imageKey}`} />
     {images.length > 1 && <div className="mt-3 flex flex-wrap gap-3" role="group" aria-label={t('Product images', 'صور المنتج')}>
       {images.map((src, index) => <button key={src} type="button" onClick={() => setActive(index)} aria-current={index === active}
