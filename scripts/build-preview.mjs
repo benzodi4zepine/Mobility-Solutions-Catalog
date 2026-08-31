@@ -82,6 +82,8 @@ const title = html.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? 'Mafaz Mobility C
 const fontLinks = [...html.matchAll(/<link[^>]*fonts\.(?:googleapis|gstatic)\.com[^>]*>/g)]
   .map((m) => m[0])
   .join('\n    ');
+const description = html.match(/<meta name="description"[^>]*>/)?.[0] ?? '';
+const structuredData = html.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/)?.[0] ?? '';
 
 // Static hosting has no API server behind it, so answer the app's own calls
 // from the snapshot and acknowledge referral submissions locally.
@@ -128,7 +130,9 @@ const escape = (code) => code.replaceAll('</script', '<\\/script');
 const page = `<meta charset="utf-8" />
     <title>${title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    ${description}
     ${fontLinks}
+    ${structuredData}
     <style>${css}</style>
     <div id="root"></div>
     <script>${escape(shim)}</script>

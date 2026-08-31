@@ -3,6 +3,7 @@ import { ArrowUpRight, MessageCircle, ShieldCheck } from 'lucide-react';
 import { useGetCatalogCategory, useGetLocations, useGetSolutions, getGetCatalogCategoryQueryKey, getGetLocationsQueryKey, getGetSolutionsQueryKey } from '@workspace/api-client-react';
 import type { Solution } from '@workspace/api-client-react';
 import { useLanguage } from '@/i18n/language';
+import { usePageMeta } from '@/lib/page-meta';
 import { Breadcrumbs } from '@/components/catalog/breadcrumbs';
 import { SolutionImage } from '@/components/catalog/solution-image';
 import { SolutionGallery } from '@/components/catalog/solution-gallery';
@@ -29,9 +30,11 @@ export function SolutionDetailBody() {
   const category = query.data;
   const solution = category?.solutions.find((item: Solution) => item.id === solutionId);
 
-  if (query.isLoading) return <main className="page-in mx-auto max-w-7xl px-5 py-20 lg:px-10"><div className="shimmer h-16 w-2/3 rounded-xl" /><div className="mt-8 shimmer h-80 rounded-[1.5rem]" /></main>;
+  usePageMeta(solution ? t(solution.title, solution.titleArabic) : '', solution?.description);
 
-  if (!solution || !category) return <main className="page-in mx-auto max-w-3xl px-5 py-24 text-center lg:py-32" data-testid="solution-not-found">
+  if (query.isLoading) return <main id="main" className="page-in mx-auto max-w-7xl px-5 py-20 lg:px-10"><div className="shimmer h-16 w-2/3 rounded-xl" /><div className="mt-8 shimmer h-80 rounded-[1.5rem]" /></main>;
+
+  if (!solution || !category) return <main id="main" className="page-in mx-auto max-w-3xl px-5 py-24 text-center lg:py-32" data-testid="solution-not-found">
     <h1 className="font-serif text-5xl leading-[.95]">{t('We could not find that solution.', 'لم نتمكن من العثور على هذا الحل.')}</h1>
     <p className="mt-5 text-sm text-[hsl(var(--muted-foreground))]">{t('It may have been renamed or moved. The full catalog is a good place to start.', 'ربما تغيّر اسمه أو مكانه. الكتالوج الكامل نقطة بداية جيدة.')}</p>
     <Link href="/catalog" className="mt-8 inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))] px-6 py-3 text-sm font-bold text-[hsl(var(--primary-foreground))]" data-testid="link-back-to-catalog">{t('Browse the catalog', 'تصفّح الكتالوج')} <ArrowUpRight size={16} /></Link>
@@ -49,7 +52,7 @@ export function SolutionDetailBody() {
   const whatsapp = locations.data?.find(location => location.isPrimary)?.whatsapp ?? locations.data?.[0]?.whatsapp;
   const whatsappHref = whatsapp ? `https://wa.me/${whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(t(`Hello Mafaz, I would like to ask about: ${solution.title}`, `مرحباً مفاز، أود الاستفسار عن: ${solution.titleArabic}`))}` : null;
 
-  return <main className="page-in mx-auto max-w-7xl px-5 py-14 lg:px-10 lg:py-20">
+  return <main id="main" className="page-in mx-auto max-w-7xl px-5 py-14 lg:px-10 lg:py-20">
     <Breadcrumbs items={[
       { label: t('Home', 'الرئيسية'), href: '/' },
       { label: t('Catalog', 'الكتالوج'), href: '/catalog' },

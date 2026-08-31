@@ -1,11 +1,13 @@
 import { useGetSolutions, getGetSolutionsQueryKey } from '@workspace/api-client-react';
 import { useLanguage } from '@/i18n/language';
+import { usePageMeta } from '@/lib/page-meta';
 import { Breadcrumbs } from '@/components/catalog/breadcrumbs';
 import { SolutionExplorer } from '@/components/catalog/solution-explorer';
 
 /** The whole catalog in one place, searchable and filterable. */
 export function CatalogIndexBody() {
   const { t } = useLanguage();
+  usePageMeta(t('Catalog', 'الكتالوج'), t('Search every prosthetic and orthotic solution Mafaz provides.', 'ابحث في كل حلول الأطراف الاصطناعية والأجهزة التقويمية لدى مفاز.'));
   const query = useGetSolutions({ query: { queryKey: getGetSolutionsQueryKey(), staleTime: 300000 } });
 
   return <main className="page-in mx-auto max-w-7xl px-5 py-14 lg:px-10 lg:py-20">
