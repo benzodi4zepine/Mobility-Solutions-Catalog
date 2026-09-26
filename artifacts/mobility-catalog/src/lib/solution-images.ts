@@ -14,7 +14,7 @@
  * gap stays visible.
  *
  * `imageKey` values in use: smart-knee, carbon-foot, socket, bionic-hand,
- * digital-scan, passive-limb, spinal-brace, carbon-afo, kafo, insole,
+ * passive-limb, spinal-brace, carbon-afo, kafo, insole,
  * diabetic-care.
  */
 const files = import.meta.glob<string>(

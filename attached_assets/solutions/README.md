@@ -16,8 +16,7 @@ Solutions without photos fall back to a placeholder labelled "photo pending",
 so the layout stays intact and the gap is visible rather than silent.
 
 `imageKey` values in use: smart-knee, carbon-foot, socket, bionic-hand,
-digital-scan, passive-limb, spinal-brace, carbon-afo, kafo, insole,
-diabetic-care.
+passive-limb, spinal-brace, carbon-afo, kafo, insole, diabetic-care.
 
 Note on rights: Mafaz is an authorised Ottobock distributor, so Ottobock
 product imagery may be published here. Imagery from any other manufacturer

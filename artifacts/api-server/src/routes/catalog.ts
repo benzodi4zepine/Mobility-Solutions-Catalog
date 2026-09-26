@@ -75,17 +75,6 @@ const prostheticSolutions = [
     featured: false,
   },
   {
-    id: "digital-fitting",
-    title: "Digital scanning & CAD/CAM",
-    titleArabic: "المسح الرقمي والتصميم CAD/CAM",
-    category: "Digital workflow",
-    description:
-      "A precise digital pathway from 3D scan to custom design, fitting, and refinement.",
-    tags: ["3D scan", "CAD/CAM", "Precision"],
-    imageKey: "digital-scan",
-    featured: false,
-  },
-  {
     id: "passive-upper-limb",
     title: "Mechanical & cosmetic limbs",
     titleArabic: "الأطراف الميكانيكية والتجميلية",
