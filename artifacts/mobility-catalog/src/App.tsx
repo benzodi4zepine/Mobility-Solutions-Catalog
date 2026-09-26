@@ -15,7 +15,7 @@ import { SolutionExplorer } from '@/components/catalog/solution-explorer';
 import { SolutionImage } from '@/components/catalog/solution-image';
 import { CatalogIndexBody } from '@/pages/catalog-index';
 import { SolutionDetailBody } from '@/pages/solution-detail';
-import mafazLogo from '@assets/Screenshot_2025-10-02_120532-removebg-preview_1786537533167.png';
+import mafazLogo from '@assets/mafaz-logo.png';
 import heroFitting from '@assets/mafaz-hero-fitting.jpg';
 
 const queryClient = new QueryClient();
