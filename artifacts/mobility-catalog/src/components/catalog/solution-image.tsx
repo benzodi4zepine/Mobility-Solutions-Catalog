@@ -12,7 +12,9 @@ export function SolutionImage({ imageKey, title, accent = 'teal', large = false 
   const sizing = large ? 'min-h-[340px]' : 'min-h-[185px]';
 
   if (src) {
-    return <img src={src} alt={title} loading="lazy" width={800} height={600} className={`w-full rounded-[1.4rem] object-cover ${large ? 'aspect-[16/10]' : 'aspect-[4/3]'}`} data-testid={`image-product-${imageKey}`} />;
+    // Product shots are contained rather than cropped: a tall orthosis would
+    // otherwise be reduced to a slice of its own middle.
+    return <img src={src} alt={title} loading="lazy" width={800} height={600} className={`w-full rounded-[1.4rem] bg-[hsl(var(--card))] object-contain ${large ? 'aspect-[16/10]' : 'aspect-[4/3]'}`} data-testid={`image-product-${imageKey}`} />;
   }
 
   return <div className={`product-art product-art-${accent} relative overflow-hidden rounded-[1.4rem] ${sizing}`} data-testid={`image-product-${imageKey}`} role="img" aria-label={t(`Photograph pending for ${title}`, `الصورة قيد الإعداد لـ ${title}`)}>
