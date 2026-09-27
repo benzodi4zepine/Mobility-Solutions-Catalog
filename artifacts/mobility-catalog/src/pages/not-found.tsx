@@ -15,7 +15,6 @@ export function NotFoundBody({ heading, body }: { heading?: string; body?: strin
   const routes = [
     { href: '/catalog', label: t('Browse the catalog', 'تصفّح الكتالوج') },
     { href: '/referral', label: t('Refer a patient', 'إحالة مريض') },
-    { href: '/outcomes', label: t('Clinical outcomes', 'النتائج السريرية') },
     { href: '/contact', label: t('Contact the clinic', 'تواصل مع العيادة') },
   ];
 

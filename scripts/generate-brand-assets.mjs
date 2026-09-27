@@ -4,8 +4,8 @@
  * the Mafaz logo, so the three of them stay in step with the brand.
  *
  * The logo carries a vertical "MaFaZ Co. Ltd." wordmark down its right edge,
- * which turns to mush below about 64px, so the icons crop to the figure group
- * and the wordmark is set as live text on the share card instead.
+ * which turns to mush below about 64px, so the icons crop to the figure group.
+ * The share card shows the logo whole, at close to its native size.
  *
  * Usage: node scripts/generate-brand-assets.mjs
  */
@@ -24,7 +24,6 @@ const dataUri = async (file, mime) =>
   `data:${mime};base64,${(await readFile(file)).toString('base64')}`;
 
 const logo = await dataUri(path.join(assets, 'mafaz-logo.png'), 'image/png');
-const hero = await dataUri(path.join(assets, 'mafaz-hero-fitting.jpg'), 'image/jpeg');
 
 /** The logo with its vertical wordmark cropped away, scaled to a given height. */
 const figures = (height) => {
@@ -72,28 +71,12 @@ await shoot(
   { width: 180, height: 180, out: path.join(publicDir, 'apple-touch-icon.png') },
 );
 
-// --- share card: what a WhatsApp or Facebook link preview shows
+// --- share card: the logo itself, which is what a shared link should show
 const share = page(1200, 630, `
-<div style="width:1200px;height:630px;display:flex">
-  <div style="width:520px;height:630px;overflow:hidden;position:relative">
-    <img src="${hero}" style="width:100%;height:100%;object-fit:cover;object-position:50% 45%">
-  </div>
-  <div style="flex:1;background:${CREAM};padding:64px 56px;display:flex;flex-direction:column;justify-content:center;gap:26px">
-    ${figures(120)}
-    <div>
-      <div style="font-family:Georgia,'DejaVu Serif',serif;font-size:60px;line-height:1;color:${INK};letter-spacing:-1.5px">
-        Mafaz <span style="color:${BLUE}">Mobility</span>
-      </div>
-      <div dir="rtl" style="margin-top:16px;font-size:26px;line-height:1.5;color:${INK};opacity:.72">
-        مفاز للأطراف الاصطناعية والأجهزة المساندة
-      </div>
-    </div>
-    <div style="font-size:19px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:${BLUE}">
-      Prosthetics &amp; Orthotics · Amman
-    </div>
-  </div>
+<div style="width:1200px;height:630px;background:${CREAM};display:flex;align-items:center;justify-content:center">
+  <img src="${logo}" style="height:340px;width:auto;display:block">
 </div>`);
-await shoot(share, { width: 1200, height: 630, out: path.join(publicDir, 'og-share.jpg'), type: 'jpeg', quality: 86 });
+await shoot(share, { width: 1200, height: 630, out: path.join(publicDir, 'og-share.jpg'), type: 'jpeg', quality: 90 });
 
 await browser.close();
 console.log('Brand assets written to artifacts/mobility-catalog/public/');
