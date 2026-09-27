@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
-import express, { type Express } from "express";
+import express, { type ErrorRequestHandler, type Express } from "express";
 import cors from "cors";
 import pinoHttp from "pino-http";
 import router from "./routes";
@@ -27,7 +27,21 @@ app.use(
     },
   }),
 );
-app.use(cors());
+const allowedOrigins = (process.env["ALLOWED_ORIGINS"] ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: allowedOrigins.length > 0 ? allowedOrigins : false,
+    methods: ["GET", "POST"],
+  }),
+);
+
+// Rate limiting keys on the client address, which is only meaningful when the
+// proxy in front of the app is trusted.
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -74,5 +88,13 @@ if (existsSync(path.join(clientDist, "index.html"))) {
     "No client build found; serving the API only. Run the mobility-catalog build first.",
   );
 }
+
+// Errors that escape a route must still answer JSON on the API, and must not
+// leak internals to the client.
+app.use(((err, req, res, _next) => {
+  req.log?.error({ err }, "Unhandled error");
+  if (res.headersSent) return;
+  res.status(500).json({ error: "Something went wrong. Please try again." });
+}) satisfies ErrorRequestHandler);
 
 export default app;

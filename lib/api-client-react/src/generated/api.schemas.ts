@@ -91,6 +91,14 @@ export interface CatalogCategory {
 export interface ClinicLocation {
   /** Public contact address for the clinic. */
   email?: string;
+  /** IANA zone the opening hours are expressed in. */
+  timezone?: string;
+  /** Days the clinic opens, 0 = Sunday through 6 = Saturday. */
+  openDays?: number[];
+  /** Opening time as HH:MM in the clinic's zone. */
+  opensAt?: string;
+  /** Closing time as HH:MM in the clinic's zone. */
+  closesAt?: string;
   id: string;
   name: string;
   nameArabic: string;
@@ -121,14 +129,27 @@ export const ReferralInputPreferredContact = {
 } as const;
 
 export interface ReferralInput {
-  /** @minLength 2 */
+  /**
+     * @minLength 2
+     * @maxLength 120
+     */
   referrerName: string;
-  /** @minLength 2 */
+  /**
+     * @minLength 2
+     * @maxLength 160
+     */
   organization: string;
-  /** @minLength 5 */
+  /**
+     * @minLength 5
+     * @maxLength 32
+     */
   phone: string;
+  /** @maxLength 254 */
   email?: string;
-  /** @minLength 2 */
+  /**
+     * @minLength 2
+     * @maxLength 120
+     */
   patientName: string;
   /**
      * @minimum 0
@@ -136,7 +157,10 @@ export interface ReferralInput {
      */
   patientAge?: number;
   areaOfNeed: ReferralInputAreaOfNeed;
-  /** @minLength 10 */
+  /**
+     * @minLength 10
+     * @maxLength 4000
+     */
   clinicalNotes: string;
   preferredContact: ReferralInputPreferredContact;
 }

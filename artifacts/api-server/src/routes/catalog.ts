@@ -160,6 +160,10 @@ const locations = [
     phone: "+962795185080",
     whatsapp: "962795185080",
     email: "info@mafazmedical.com",
+    timezone: "Asia/Amman",
+    openDays: [6, 0, 1, 2, 3, 4], // Saturday through Thursday
+    opensAt: "08:00",
+    closesAt: "16:00",
     hours: "Sat–Thu · 8:00–16:00",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Alrazi+Street%2C+Amman%2C+Jordan",
     isPrimary: true,

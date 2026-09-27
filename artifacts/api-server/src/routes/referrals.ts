@@ -1,6 +1,7 @@
 import { Router, type IRouter } from "express";
 import { db, referralsTable } from "@workspace/db";
 import { sendReferralEmail } from "../lib/mailer";
+import { rateLimit } from "../lib/rate-limit";
 import {
   CreateReferralBody,
   CreateReferralResponse,
@@ -8,7 +9,27 @@ import {
 
 const router: IRouter = Router();
 
-router.post("/referrals", async (req, res) => {
+const referralLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message:
+    "Too many referrals from this connection. Please wait a few minutes, or call the clinic.",
+});
+
+router.post("/referrals", referralLimiter, async (req, res) => {
+  // Bots fill every field they find; a real person never sees this one.
+  if (typeof req.body?.website === "string" && req.body.website.trim() !== "") {
+    req.log.warn("Referral rejected: honeypot filled");
+    res.status(201).json({
+      id: "REF-00000000",
+      status: "received",
+      message: "Referral received.",
+      receivedAt: new Date().toISOString(),
+      delivered: true,
+    });
+    return;
+  }
+
   const parsed = CreateReferralBody.safeParse(req.body);
 
   if (!parsed.success) {

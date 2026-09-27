@@ -167,6 +167,10 @@ export const GetSolutionsResponse = zod.array(GetSolutionsResponseItem)
  */
 export const GetLocationsResponseItem = zod.object({
   "email": zod.string().optional().describe('Public contact address for the clinic.'),
+  "timezone": zod.string().optional().describe('IANA zone the opening hours are expressed in.'),
+  "openDays": zod.array(zod.number()).optional().describe('Days the clinic opens, 0 = Sunday through 6 = Saturday.'),
+  "opensAt": zod.string().optional().describe('Opening time as HH:MM in the clinic\'s zone.'),
+  "closesAt": zod.string().optional().describe('Closing time as HH:MM in the clinic\'s zone.'),
   "id": zod.string(),
   "name": zod.string(),
   "nameArabic": zod.string(),
@@ -185,29 +189,36 @@ export const GetLocationsResponse = zod.array(GetLocationsResponseItem)
  * @summary Submit a patient referral
  */
 export const createReferralBodyReferrerNameMin = 2;
+export const createReferralBodyReferrerNameMax = 120;
 
 export const createReferralBodyOrganizationMin = 2;
+export const createReferralBodyOrganizationMax = 160;
 
 export const createReferralBodyPhoneMin = 5;
+export const createReferralBodyPhoneMax = 32;
+
+export const createReferralBodyEmailMax = 254;
 
 export const createReferralBodyPatientNameMin = 2;
+export const createReferralBodyPatientNameMax = 120;
 
 export const createReferralBodyPatientAgeMin = 0;
 export const createReferralBodyPatientAgeMax = 120;
 
 export const createReferralBodyClinicalNotesMin = 10;
+export const createReferralBodyClinicalNotesMax = 4000;
 
 
 
 export const CreateReferralBody = zod.object({
-  "referrerName": zod.string().min(createReferralBodyReferrerNameMin),
-  "organization": zod.string().min(createReferralBodyOrganizationMin),
-  "phone": zod.string().min(createReferralBodyPhoneMin),
-  "email": zod.string().optional(),
-  "patientName": zod.string().min(createReferralBodyPatientNameMin),
+  "referrerName": zod.string().min(createReferralBodyReferrerNameMin).max(createReferralBodyReferrerNameMax),
+  "organization": zod.string().min(createReferralBodyOrganizationMin).max(createReferralBodyOrganizationMax),
+  "phone": zod.string().min(createReferralBodyPhoneMin).max(createReferralBodyPhoneMax),
+  "email": zod.string().max(createReferralBodyEmailMax).optional(),
+  "patientName": zod.string().min(createReferralBodyPatientNameMin).max(createReferralBodyPatientNameMax),
   "patientAge": zod.number().min(createReferralBodyPatientAgeMin).max(createReferralBodyPatientAgeMax).optional(),
   "areaOfNeed": zod.enum(['prosthetics', 'orthotics', 'other']),
-  "clinicalNotes": zod.string().min(createReferralBodyClinicalNotesMin),
+  "clinicalNotes": zod.string().min(createReferralBodyClinicalNotesMin).max(createReferralBodyClinicalNotesMax),
   "preferredContact": zod.enum(['phone', 'whatsapp', 'email'])
 })
 

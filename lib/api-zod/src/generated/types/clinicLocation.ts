@@ -9,6 +9,14 @@
 export interface ClinicLocation {
   /** Public contact address for the clinic. */
   email?: string;
+  /** IANA zone the opening hours are expressed in. */
+  timezone?: string;
+  /** Days the clinic opens, 0 = Sunday through 6 = Saturday. */
+  openDays?: number[];
+  /** Opening time as HH:MM in the clinic's zone. */
+  opensAt?: string;
+  /** Closing time as HH:MM in the clinic's zone. */
+  closesAt?: string;
   id: string;
   name: string;
   nameArabic: string;

@@ -314,6 +314,20 @@ components:
         email:
           type: string
           description: Public contact address for the clinic.
+        timezone:
+          type: string
+          description: IANA zone the opening hours are expressed in.
+        openDays:
+          type: array
+          description: Days the clinic opens, 0 = Sunday through 6 = Saturday.
+          items:
+            type: number
+        opensAt:
+          type: string
+          description: Opening time as HH:MM in the clinic's zone.
+        closesAt:
+          type: string
+          description: Closing time as HH:MM in the clinic's zone.
         id:
           type: string
         name:
@@ -348,17 +362,22 @@ components:
         referrerName:
           type: string
           minLength: 2
+          maxLength: 120
         organization:
           type: string
           minLength: 2
+          maxLength: 160
         phone:
           type: string
           minLength: 5
+          maxLength: 32
         email:
           type: string
+          maxLength: 254
         patientName:
           type: string
           minLength: 2
+          maxLength: 120
         patientAge:
           type: number
           minimum: 0
@@ -369,6 +388,7 @@ components:
         clinicalNotes:
           type: string
           minLength: 10
+          maxLength: 4000
         preferredContact:
           type: string
           enum: [phone, whatsapp, email]
