@@ -122,13 +122,13 @@ const orthoticSolutions = [
     featured: false,
   },
   {
-    id: "3d-insoles",
-    title: "Custom 3D insoles",
-    titleArabic: "الضبانات الطبية ثلاثية الأبعاد",
+    id: "custom-insoles",
+    title: "Custom insoles",
+    titleArabic: "الضبانات الطبية المخصصة",
     category: "Foot orthotics",
     description:
       "Digitally designed insoles with pressure-aware offloading and daily comfort.",
-    tags: ["3D", "Pressure care", "Comfort"],
+    tags: ["Pressure care", "Comfort"],
     imageKey: "insole",
     featured: true,
   },
