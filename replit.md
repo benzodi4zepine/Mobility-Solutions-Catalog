@@ -4,6 +4,13 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Run & Operate
 
+- Production serves as ONE origin: build the client, then start the API server,
+  which serves `artifacts/mobility-catalog/dist/public` and mounts the API at
+  `/api`. Unknown non-API paths fall through to the app shell so client routes
+  such as `/catalog/prosthetics` work on a cold load. Override the build
+  location with `CLIENT_DIST`. Serving the page from a different origin to the
+  API breaks referrals, because the form posts to a relative `/api/referrals`.
+
 - `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages

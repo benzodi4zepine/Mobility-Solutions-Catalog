@@ -266,7 +266,7 @@ function Referral() {
   const locations = useGetLocations({ query: { queryKey: getGetLocationsQueryKey(), staleTime: 300000 } });
   const clinic = locations.data?.find(location => location.isPrimary) ?? locations.data?.[0];
   const mutation = useCreateReferral();
-  const [sent, setSent] = useState<{ delivered: boolean; body: string; reference?: string } | null>(null);
+  const [sent, setSent] = useState<{ delivered: boolean; body: string; reference?: string; reason?: string } | null>(null);
   const [error, setError] = useState('');
 
   const collect = (form: HTMLFormElement): ReferralPayload => {
@@ -310,7 +310,7 @@ function Referral() {
     const payload = collect(form);
     const body = compose(payload);
     mutation.mutate({ data: payload }, {
-      onSuccess: result => setSent({ delivered: Boolean(result.delivered), body, reference: result.id }),
+      onSuccess: result => setSent({ delivered: Boolean(result.delivered), body, reference: result.id, reason: result.message }),
       onError: () => setSent({ delivered: false, body }),
     });
   };
@@ -335,6 +335,7 @@ function Referral() {
         ? t('Your referral is with the clinical team. Most referrals receive a response within one working day.', 'إحالتك الآن لدى الفريق السريري. تتلقى معظم الإحالات رداً خلال يوم عمل واحد.')
         : t('We could not deliver it automatically from here. Send it on WhatsApp, or copy it below and email it — it takes a moment and nothing is lost.', 'تعذّر إرسالها تلقائياً من هنا. أرسلها عبر واتساب، أو انسخها أدناه وأرسلها بالبريد — لن يضيع شيء.')}
     </p>
+    {!sent.delivered && sent.reason && <p className="mt-3 max-w-md text-xs text-[hsl(var(--muted-foreground))]" dir="auto" data-testid="text-referral-reason">{sent.reason}</p>}
     {sent.delivered && sent.reference && <div className="mt-8 rounded-full border border-[hsl(var(--border))] px-5 py-3 font-mono text-[11px] tracking-[.08em]" dir="ltr" data-testid="text-reference">REF / {sent.reference}</div>}
 
     {!sent.delivered && <section className="mt-10 w-full rounded-[1.4rem] border border-[hsl(var(--border))] bg-[hsl(var(--card)/.6)] p-5 text-start sm:p-6">

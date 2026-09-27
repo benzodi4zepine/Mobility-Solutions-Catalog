@@ -112,7 +112,7 @@ const shim = `
       return Promise.resolve(json({
         id,
         status: 'received',
-        message: 'Preview mode — this referral was not sent.',
+        message: 'This is the static preview, which has no server behind it, so nothing was sent. On the live site the clinic receives this by email.',
         receivedAt: new Date().toISOString(),
         delivered: false,
       }, 201));
