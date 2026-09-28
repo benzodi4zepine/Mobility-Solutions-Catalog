@@ -144,6 +144,17 @@ const orthoticSolutions = [
     featured: false,
   },
   {
+    id: "hkafo",
+    title: "Hip knee ankle foot orthosis (HKAFO)",
+    titleArabic: "جهاز الورك والركبة والكاحل والقدم (HKAFO)",
+    category: "Lower limb",
+    description:
+      "Full lower-limb bracing that joins a padded pelvic section to leg uprights through hip and knee joints, lined throughout and closed with wide straps.",
+    tags: ["HKAFO", "Pelvic section", "Custom"],
+    imageKey: "hkafo",
+    featured: false,
+  },
+  {
     id: "custom-insoles",
     title: "Custom insoles",
     titleArabic: "الضبانات الطبية المخصصة",
