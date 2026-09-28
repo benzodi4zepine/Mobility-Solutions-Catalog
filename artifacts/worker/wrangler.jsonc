@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "mafaz-mobility",
+  "account_id": "deceb87d47b4671bf032de86325086dd",
   "main": "src/index.ts",
   "compatibility_date": "2025-01-09",
   // The Worker never needs Node's APIs itself, but drizzle and the generated
@@ -24,7 +25,7 @@
     {
       "binding": "DB",
       "database_name": "mafaz-referrals",
-      "database_id": "PLACEHOLDER_SET_BY_WRANGLER_D1_CREATE",
+      "database_id": "0b49c113-aa8f-41e8-a222-beb39e670a3a",
       "migrations_dir": "migrations"
     }
   ],
