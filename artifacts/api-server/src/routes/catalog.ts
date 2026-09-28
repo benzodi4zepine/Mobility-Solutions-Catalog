@@ -122,6 +122,17 @@ const orthoticSolutions = [
     featured: false,
   },
   {
+    id: "dafo",
+    title: "Dynamic ankle foot orthosis (DAFO)",
+    titleArabic: "جهاز القدم والكاحل الديناميكي (DAFO)",
+    category: "Lower limb",
+    description:
+      "Ankle-foot orthosis with an articulated ankle joint, a moulded footplate and adjustable padded straps, made in a range of printed finishes.",
+    tags: ["DAFO", "Articulated", "Custom"],
+    imageKey: "dafo",
+    featured: false,
+  },
+  {
     id: "custom-kafo",
     title: "Custom KAFOs",
     titleArabic: "أجهزة KAFO المخصصة",
