@@ -52,6 +52,7 @@ export const GetCatalogOverviewResponse = zod.object({
   "valueArabic": zod.string().optional()
 })).optional().describe('Key specifications. Clinical content - never generated.'),
   "relatedIds": zod.array(zod.string()).optional(),
+  "comingSoon": zod.boolean().optional().describe('Offered soon rather than available to fit today.'),
   "products": zod.array(zod.object({
   "id": zod.string(),
   "name": zod.string(),
@@ -106,6 +107,7 @@ export const GetCatalogCategoryResponse = zod.object({
   "valueArabic": zod.string().optional()
 })).optional().describe('Key specifications. Clinical content - never generated.'),
   "relatedIds": zod.array(zod.string()).optional(),
+  "comingSoon": zod.boolean().optional().describe('Offered soon rather than available to fit today.'),
   "products": zod.array(zod.object({
   "id": zod.string(),
   "name": zod.string(),
@@ -147,6 +149,7 @@ export const GetSolutionsResponseItem = zod.object({
   "valueArabic": zod.string().optional()
 })).optional().describe('Key specifications. Clinical content - never generated.'),
   "relatedIds": zod.array(zod.string()).optional(),
+  "comingSoon": zod.boolean().optional().describe('Offered soon rather than available to fit today.'),
   "products": zod.array(zod.object({
   "id": zod.string(),
   "name": zod.string(),

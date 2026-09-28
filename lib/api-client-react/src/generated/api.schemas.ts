@@ -63,6 +63,8 @@ export interface Solution {
   /** Key specifications. Clinical content - never generated. */
   specs?: SolutionSpec[];
   relatedIds?: string[];
+  /** Offered soon rather than available to fit today. */
+  comingSoon?: boolean;
   /** Individual models fitted under this solution. */
   products: Product[];
 }

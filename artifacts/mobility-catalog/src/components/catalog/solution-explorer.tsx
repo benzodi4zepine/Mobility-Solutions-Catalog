@@ -124,7 +124,7 @@ export function SolutionExplorer({ solutions, basePath }: { solutions: Solution[
             <Link href={`/catalog/${solution.categorySlug}/${solution.id}`} className="flex flex-1 flex-col" data-testid={`card-solution-${solution.id}`}>
               <SolutionImage imageKey={solution.imageKey} title={t(solution.title, solution.titleArabic)} accent={i % 2 ? 'coral' : 'teal'} />
               <div className="flex flex-1 flex-col p-3">
-                <p dir="auto" className="text-[10px] font-bold uppercase tracking-[.14em] text-[hsl(var(--secondary))]">{solution.category}</p>
+                <div className="flex flex-wrap items-center gap-2"><p dir="auto" className="text-[10px] font-bold uppercase tracking-[.14em] text-[hsl(var(--secondary))]">{solution.category}</p>{solution.comingSoon && <span className="rounded-full bg-[hsl(var(--accent)/.16)] px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[.12em] text-[hsl(var(--accent))]" data-testid="badge-coming-soon">{t('Coming soon', 'قريباً')}</span>}</div>
                 <h3 className="mt-2 font-serif text-2xl leading-tight">{t(solution.title, solution.titleArabic)}</h3>
                 {solution.products.length > 0 && <p className="mt-1 text-xs font-semibold text-[hsl(var(--secondary))]" data-testid={`count-models-${solution.id}`}>{t(`${solution.products.length} models`, `${solution.products.length} موديلات`)}</p>}
                 <p dir="auto" className="mt-3 flex-1 text-sm leading-6 text-[hsl(var(--muted-foreground))]">{t(solution.description, solution.descriptionArabic || solution.description)}</p>

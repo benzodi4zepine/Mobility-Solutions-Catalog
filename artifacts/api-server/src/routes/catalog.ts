@@ -142,6 +142,7 @@ const orthoticSolutions = [
     tags: ["Diabetic care", "Offloading", "Protection"],
     imageKey: "diabetic-care",
     featured: false,
+    comingSoon: true,
   },
 ];
 

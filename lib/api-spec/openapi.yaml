@@ -238,6 +238,9 @@ components:
           type: array
           items:
             type: string
+        comingSoon:
+          type: boolean
+          description: Offered soon rather than available to fit today.
         products:
           type: array
           description: Individual models fitted under this solution.
