@@ -144,6 +144,17 @@ const orthoticSolutions = [
     featured: false,
   },
   {
+    id: "long-leg-brace",
+    title: "Long leg brace (KAFO)",
+    titleArabic: "جهاز الساق الطويل (KAFO)",
+    category: "Lower limb",
+    description:
+      "Thigh-to-foot bracing on metal uprights with knee joints, moulded shells and a perforated lining, closed with leather straps.",
+    tags: ["KAFO", "Knee joints", "Custom"],
+    imageKey: "long-leg-brace",
+    featured: false,
+  },
+  {
     id: "hkafo",
     title: "Hip knee ankle foot orthosis (HKAFO)",
     titleArabic: "جهاز الورك والركبة والكاحل والقدم (HKAFO)",
