@@ -21,7 +21,7 @@ const buildCategories = () => [
   {
     slug: "orthotics",
     title: "Orthotic solutions",
-    titleArabic: "الأجهزة التعويضية والتعديلية",
+    titleArabic: "الجبائر والأجهزة التقويمية",
     description:
       "Thoughtful support for alignment, healing, and everyday independence — from spinal bracing to custom foot orthotics.",
     solutionCount: orthoticSolutions.length,
@@ -294,7 +294,7 @@ router.get("/catalog/categories/:slug", (req, res) => {
         ? {
             slug,
             title: "Orthotic solutions",
-            titleArabic: "الأجهزة التعويضية والتعديلية",
+            titleArabic: "الجبائر والأجهزة التقويمية",
             description: categories[1].description,
             solutions: orthotics,
             workflow: [
