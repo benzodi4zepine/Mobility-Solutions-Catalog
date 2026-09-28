@@ -11,6 +11,8 @@ export interface CatalogCategorySummary {
   title: string;
   titleArabic: string;
   description: string;
+  /** Arabic translation of description. */
+  descriptionArabic?: string;
   solutionCount: number;
   accent: string;
 }

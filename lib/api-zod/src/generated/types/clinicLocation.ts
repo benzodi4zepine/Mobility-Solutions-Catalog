@@ -21,9 +21,13 @@ export interface ClinicLocation {
   name: string;
   nameArabic: string;
   address: string;
+  /** Arabic form of address. */
+  addressArabic?: string;
   phone: string;
   whatsapp: string;
   hours: string;
+  /** Arabic form of hours. */
+  hoursArabic?: string;
   mapUrl: string;
   isPrimary: boolean;
 }

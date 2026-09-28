@@ -121,7 +121,7 @@ export function SolutionDetailBody() {
       </div>
       <aside className="h-fit rounded-[1.4rem] border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 lg:sticky lg:top-24">
         <p className="text-sm font-bold">{t('How fitting works', 'كيف تتم عملية التركيب')}</p>
-        <ol className="mt-6 space-y-6">{category.workflow.map((step: string, i: number) => <li key={step} dir="auto" className="relative flex gap-3 text-sm leading-5 text-[hsl(var(--muted-foreground))]"><span className="relative z-10 grid size-6 shrink-0 place-items-center rounded-full bg-[hsl(var(--primary))] text-[10px] font-bold text-[hsl(var(--primary-foreground))]">{String(i + 1).padStart(2, '0')}</span><span>{step}</span></li>)}</ol>
+        <ol className="mt-6 space-y-6">{category.workflow.map((step: string, i: number) => <li key={step} dir="auto" className="relative flex gap-3 text-sm leading-5 text-[hsl(var(--muted-foreground))]"><span className="relative z-10 grid size-6 shrink-0 place-items-center rounded-full bg-[hsl(var(--primary))] text-[10px] font-bold text-[hsl(var(--primary-foreground))]">{String(i + 1).padStart(2, '0')}</span><span>{t(step, category.workflowArabic?.[i] || step)}</span></li>)}</ol>
       </aside>
     </section>
 

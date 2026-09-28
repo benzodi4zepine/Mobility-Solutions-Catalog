@@ -152,6 +152,9 @@ components:
           type: string
         description:
           type: string
+        descriptionArabic:
+          type: string
+          description: Arabic translation of description.
         solutionCount:
           type: number
         accent:
@@ -174,12 +177,20 @@ components:
           type: string
         description:
           type: string
+        descriptionArabic:
+          type: string
+          description: Arabic translation of description.
         solutions:
           type: array
           items:
             $ref: "#/components/schemas/Solution"
         workflow:
           type: array
+          items:
+            type: string
+        workflowArabic:
+          type: array
+          description: Arabic translation of workflow, step for step and in the same order.
           items:
             type: string
       required:
@@ -339,12 +350,18 @@ components:
           type: string
         address:
           type: string
+        addressArabic:
+          type: string
+          description: Arabic form of address.
         phone:
           type: string
         whatsapp:
           type: string
         hours:
           type: string
+        hoursArabic:
+          type: string
+          description: Arabic form of hours.
         mapUrl:
           type: string
         isPrimary:

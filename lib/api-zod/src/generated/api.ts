@@ -27,6 +27,7 @@ export const GetCatalogOverviewResponse = zod.object({
   "title": zod.string(),
   "titleArabic": zod.string(),
   "description": zod.string(),
+  "descriptionArabic": zod.string().optional().describe('Arabic translation of description.'),
   "solutionCount": zod.number(),
   "accent": zod.string()
 })),
@@ -85,6 +86,7 @@ export const GetCatalogCategoryResponse = zod.object({
   "title": zod.string(),
   "titleArabic": zod.string(),
   "description": zod.string(),
+  "descriptionArabic": zod.string().optional().describe('Arabic translation of description.'),
   "solutions": zod.array(zod.object({
   "id": zod.string(),
   "title": zod.string(),
@@ -119,7 +121,8 @@ export const GetCatalogCategoryResponse = zod.object({
   "tags": zod.array(zod.string()).optional()
 }).describe('An individual model fitted under a solution.')).describe('Individual models fitted under this solution.')
 })),
-  "workflow": zod.array(zod.string())
+  "workflow": zod.array(zod.string()),
+  "workflowArabic": zod.array(zod.string()).optional().describe('Arabic translation of workflow, step for step and in the same order.')
 })
 
 
@@ -178,9 +181,11 @@ export const GetLocationsResponseItem = zod.object({
   "name": zod.string(),
   "nameArabic": zod.string(),
   "address": zod.string(),
+  "addressArabic": zod.string().optional().describe('Arabic form of address.'),
   "phone": zod.string(),
   "whatsapp": zod.string(),
   "hours": zod.string(),
+  "hoursArabic": zod.string().optional().describe('Arabic form of hours.'),
   "mapUrl": zod.string(),
   "isPrimary": zod.boolean()
 })

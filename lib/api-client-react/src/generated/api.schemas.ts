@@ -14,6 +14,8 @@ export interface CatalogCategorySummary {
   title: string;
   titleArabic: string;
   description: string;
+  /** Arabic translation of description. */
+  descriptionArabic?: string;
   solutionCount: number;
   accent: string;
 }
@@ -86,8 +88,12 @@ export interface CatalogCategory {
   title: string;
   titleArabic: string;
   description: string;
+  /** Arabic translation of description. */
+  descriptionArabic?: string;
   solutions: Solution[];
   workflow: string[];
+  /** Arabic translation of workflow, step for step and in the same order. */
+  workflowArabic?: string[];
 }
 
 export interface ClinicLocation {
@@ -105,9 +111,13 @@ export interface ClinicLocation {
   name: string;
   nameArabic: string;
   address: string;
+  /** Arabic form of address. */
+  addressArabic?: string;
   phone: string;
   whatsapp: string;
   hours: string;
+  /** Arabic form of hours. */
+  hoursArabic?: string;
   mapUrl: string;
   isPrimary: boolean;
 }

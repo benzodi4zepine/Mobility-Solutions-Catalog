@@ -15,6 +15,8 @@ const buildCategories = () => [
     titleArabic: "الأطراف الاصطناعية",
     description:
       "Confident movement, engineered around each person. From advanced knee joints to responsive carbon feet and bionic upper limbs.",
+    descriptionArabic:
+      "حركة واثقة، مصمّمة حول كل شخص. من مفاصل الركبة المتقدمة إلى أقدام الكربون المتجاوبة والأطراف العلوية الإلكترونية.",
     solutionCount: prostheticSolutions.length,
     accent: "cobalt",
   },
@@ -24,6 +26,8 @@ const buildCategories = () => [
     titleArabic: "الجبائر والأجهزة التقويمية",
     description:
       "Thoughtful support for alignment, healing, and everyday independence — from spinal bracing to custom foot orthotics.",
+    descriptionArabic:
+      "دعم مدروس للمحاذاة والتعافي والاستقلالية اليومية — من أجهزة العمود الفقري إلى الضبانات الطبية المخصصة.",
     solutionCount: orthoticSolutions.length,
     accent: "teal",
   },
@@ -37,6 +41,8 @@ const prostheticSolutions = [
     category: "Lower limb",
     description:
       "Adaptive stance and swing control that responds to changing pace, terrain, and confidence.",
+    descriptionArabic:
+      "تحكّم متكيّف في مرحلتي الوقوف والأرجحة، يستجيب لتغيّر السرعة والتضاريس والثقة.",
     tags: ["Microprocessor", "Above knee", "Adaptive"],
     imageKey: "smart-knee",
     featured: true,
@@ -48,6 +54,8 @@ const prostheticSolutions = [
     category: "Lower limb",
     description:
       "Lightweight energy return for a smoother roll-over and a more natural rhythm.",
+    descriptionArabic:
+      "ارتداد طاقة خفيف الوزن، لانتقال أكثر سلاسة وإيقاع أقرب إلى الطبيعي.",
     tags: ["Energy return", "Carbon", "Below knee"],
     imageKey: "carbon-foot",
     featured: true,
@@ -59,6 +67,8 @@ const prostheticSolutions = [
     category: "Socket technology",
     description:
       "Micro-adjustable fit with BOA-style dials, suction, and suspension options.",
+    descriptionArabic:
+      "ملاءمة دقيقة قابلة للضبط بأقراص من نوع BOA، مع خيارات الشفط والتعليق.",
     tags: ["RevoFit", "RevoLock", "Suspension"],
     imageKey: "socket",
     featured: true,
@@ -70,6 +80,8 @@ const prostheticSolutions = [
     category: "Upper limb",
     description:
       "Intuitive control and precise grip patterns for the moments that matter.",
+    descriptionArabic:
+      "تحكّم بديهي وأنماط قبضة دقيقة للحظات التي تهم.",
     tags: ["Myoelectric", "Bionic", "Upper limb"],
     imageKey: "bionic-hand",
     featured: false,
@@ -81,6 +93,8 @@ const prostheticSolutions = [
     category: "Upper limb",
     description:
       "Reliable mechanical function and natural-looking cosmetic options, shaped around lifestyle.",
+    descriptionArabic:
+      "أداء ميكانيكي موثوق وخيارات تجميلية طبيعية المظهر، مصمّمة حول نمط الحياة.",
     tags: ["Mechanical", "Cosmetic", "Custom"],
     imageKey: "passive-limb",
     featured: false,
@@ -95,6 +109,8 @@ const orthoticSolutions = [
     category: "Spinal & trunk",
     description:
       "Custom support for scoliosis management, post-surgical recovery, and trunk stability.",
+    descriptionArabic:
+      "دعم مخصّص لإدارة الجنف، والتعافي بعد الجراحة، وثبات الجذع.",
     tags: ["Scoliosis", "Post-surgical", "Custom"],
     imageKey: "spinal-brace",
     featured: true,
@@ -106,6 +122,8 @@ const orthoticSolutions = [
     category: "Lower limb",
     description:
       "Lightweight gait support that stores and returns energy through the stride.",
+    descriptionArabic:
+      "دعم خفيف للمشية يخزّن الطاقة ويعيدها خلال الخطوة.",
     tags: ["AFO", "Carbon", "Gait"],
     imageKey: "carbon-afo",
     featured: true,
@@ -117,6 +135,8 @@ const orthoticSolutions = [
     category: "Lower limb",
     description:
       "Custom-moulded ankle-foot support with a cushioned lining and adjustable straps, made in a range of finishes.",
+    descriptionArabic:
+      "دعم للكاحل والقدم مصبوب حسب القياس، ببطانة مبطّنة وأحزمة قابلة للضبط، ويُصنع بمجموعة من التشطيبات.",
     tags: ["AFO", "Thermoplastic", "Custom"],
     imageKey: "thermoplastic-afo",
     featured: false,
@@ -128,6 +148,8 @@ const orthoticSolutions = [
     category: "Lower limb",
     description:
       "Ankle-foot orthosis with an articulated ankle joint, a moulded footplate and adjustable padded straps, made in a range of printed finishes.",
+    descriptionArabic:
+      "جهاز للكاحل والقدم بمفصل كاحل متحرّك، ولوح قدم مصبوب، وأحزمة مبطّنة قابلة للضبط، ويُصنع بمجموعة من التشطيبات المطبوعة.",
     tags: ["DAFO", "Articulated", "Custom"],
     imageKey: "dafo",
     featured: false,
@@ -139,6 +161,8 @@ const orthoticSolutions = [
     category: "Lower limb",
     description:
       "Purpose-built alignment and stability for complex lower-limb needs.",
+    descriptionArabic:
+      "محاذاة وثبات مصمّمان خصيصاً للاحتياجات المعقّدة في الطرف السفلي.",
     tags: ["KAFO", "Alignment", "Stability"],
     imageKey: "kafo",
     featured: false,
@@ -150,6 +174,8 @@ const orthoticSolutions = [
     category: "Lower limb",
     description:
       "Thigh-to-foot bracing on metal uprights with knee joints, moulded shells and a perforated lining, closed with leather straps.",
+    descriptionArabic:
+      "تجبير من الفخذ إلى القدم على دعامات معدنية بمفاصل ركبة، مع أصداف مصبوبة وبطانة مثقّبة، يُغلق بأحزمة جلدية.",
     tags: ["KAFO", "Knee joints", "Custom"],
     imageKey: "long-leg-brace",
     featured: false,
@@ -161,6 +187,8 @@ const orthoticSolutions = [
     category: "Lower limb",
     description:
       "Full lower-limb bracing that joins a padded pelvic section to leg uprights through hip and knee joints, lined throughout and closed with wide straps.",
+    descriptionArabic:
+      "تجبير كامل للطرف السفلي يصل جزءاً حوضياً مبطّناً بدعامات الساق عبر مفصلي الورك والركبة، مبطّن بالكامل ويُغلق بأحزمة عريضة.",
     tags: ["HKAFO", "Pelvic section", "Custom"],
     imageKey: "hkafo",
     featured: false,
@@ -172,6 +200,8 @@ const orthoticSolutions = [
     category: "Foot orthotics",
     description:
       "Digitally designed insoles with pressure-aware offloading and daily comfort.",
+    descriptionArabic:
+      "ضبانات مصمّمة رقمياً، تراعي توزيع الضغط وتخفيفه مع راحة يومية.",
     tags: ["Pressure care", "Comfort"],
     imageKey: "insole",
     featured: true,
@@ -183,6 +213,8 @@ const orthoticSolutions = [
     category: "Foot orthotics",
     description:
       "Protection-focused solutions designed to reduce pressure and support safer mobility.",
+    descriptionArabic:
+      "حلول تركّز على الحماية، مصمّمة لتقليل الضغط ودعم حركة أكثر أماناً.",
     tags: ["Diabetic care", "Offloading", "Protection"],
     imageKey: "diabetic-care",
     featured: false,
@@ -202,6 +234,7 @@ const locations = [
     name: "Mafaz Mobility Center",
     nameArabic: "مركز مفاز للأطراف الاصطناعية والأجهزة المساندة",
     address: "Alrazi Street, Amman, Jordan",
+    addressArabic: "شارع الرازي، عمّان، الأردن",
     phone: "+962795185080",
     whatsapp: "962795185080",
     email: "info@mafazmedical.com",
@@ -210,6 +243,7 @@ const locations = [
     opensAt: "08:00",
     closesAt: "16:00",
     hours: "Sat–Thu · 8:00–16:00",
+    hoursArabic: "السبت–الخميس · ٠٨:٠٠–١٦:٠٠",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Alrazi+Street%2C+Amman%2C+Jordan",
     isPrimary: true,
   },
@@ -282,12 +316,19 @@ router.get("/catalog/categories/:slug", (req, res) => {
           title: "Prosthetic solutions",
           titleArabic: "الأطراف الاصطناعية",
           description: categories[0].description,
+          descriptionArabic: categories[0].descriptionArabic,
           solutions: prosthetics,
           workflow: [
             "Understand your goals",
             "Scan, assess, and measure",
             "Design and fit",
             "Train, refine, and follow up",
+          ],
+          workflowArabic: [
+            "نفهم أهدافك",
+            "المسح والتقييم والقياس",
+            "التصميم والتركيب",
+            "التدريب والضبط والمتابعة",
           ],
         }
       : slug === "orthotics"
@@ -296,12 +337,19 @@ router.get("/catalog/categories/:slug", (req, res) => {
             title: "Orthotic solutions",
             titleArabic: "الجبائر والأجهزة التقويمية",
             description: categories[1].description,
+            descriptionArabic: categories[1].descriptionArabic,
             solutions: orthotics,
             workflow: [
               "Clinical assessment",
               "Digital capture and alignment",
               "Fabrication and fitting",
               "Progress review",
+            ],
+            workflowArabic: [
+              "التقييم السريري",
+              "المسح الرقمي والمحاذاة",
+              "التصنيع والتركيب",
+              "مراجعة التقدّم",
             ],
           }
         : null;

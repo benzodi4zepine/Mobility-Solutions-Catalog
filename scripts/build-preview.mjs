@@ -83,6 +83,10 @@ const fontLinks = [...html.matchAll(/<link[^>]*fonts\.(?:googleapis|gstatic)\.co
   .map((m) => m[0])
   .join('\n    ');
 const description = html.match(/<meta name="description"[^>]*>/)?.[0] ?? '';
+// Taken from index.html rather than written out here, so the app has exactly one
+// place that decides things like whether the page may be zoomed.
+const viewport = html.match(/<meta name="viewport"[^>]*>/)?.[0]
+  ?? '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
 const structuredData = html.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/)?.[0] ?? '';
 
 // Static hosting has no API server behind it, so answer the app's own calls
@@ -129,7 +133,7 @@ const escape = (code) => code.replaceAll('</script', '<\\/script');
 // directly from disk — without a charset the Arabic content renders as mojibake.
 const page = `<meta charset="utf-8" />
     <title>${title}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    ${viewport}
     ${description}
     ${fontLinks}
     ${structuredData}

@@ -12,6 +12,10 @@ export interface CatalogCategory {
   title: string;
   titleArabic: string;
   description: string;
+  /** Arabic translation of description. */
+  descriptionArabic?: string;
   solutions: Solution[];
   workflow: string[];
+  /** Arabic translation of workflow, step for step and in the same order. */
+  workflowArabic?: string[];
 }
