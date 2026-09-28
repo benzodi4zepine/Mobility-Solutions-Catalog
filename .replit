@@ -3,6 +3,20 @@ modules = ["nodejs-24"]
 [deployment]
 router = "application"
 deploymentTarget = "autoscale"
+# Without these two the deployment has nothing to build and nothing to start.
+# `build` compiles the client and the server, then writes sitemap.xml and
+# rewrites the share tags to absolute URLs - the crawler and WhatsApp both need
+# an absolute og:image, so this has to happen after the client build. SITE_URL
+# from the deployment's own secrets wins; the fallback is the live domain, so a
+# deploy is never silently published without a sitemap.
+build = [
+  "sh",
+  "-c",
+  "pnpm run build && SITE_URL=\"${SITE_URL:-https://mafazmobilitysolutions.com}\" node scripts/generate-sitemap.mjs",
+]
+# One process serves the built client and the API from the same origin, which
+# is what makes the referral form's relative POST work.
+run = ["node", "artifacts/api-server/dist/index.mjs"]
 
 [deployment.postBuild]
 args = ["pnpm", "store", "prune"]

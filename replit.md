@@ -44,14 +44,35 @@ to the clinical team.
 
 ## Going live
 
-One value is still missing before the site is fully launch-ready: the public
-origin. Set `SITE_URL` (e.g. `https://mafazmedical.com`) and run
-`node scripts/generate-sitemap.mjs` after the client build. It writes
-`sitemap.xml`, points `robots.txt` at it, and rewrites the share tags to
-absolute URLs. Until it runs, `og:image` stays relative, which is why a link
-pasted into WhatsApp shows no logo — the crawler cannot resolve a relative
-image. The script exits quietly when `SITE_URL` is unset rather than baking in
-a guessed domain.
+The site is deployed on **Replit Autoscale** at
+**https://mafazmobilitysolutions.com**, as one process serving both the built
+client and the API — which is what makes the referral form's relative POST
+work. `.replit` carries the build and run commands; the build ends by running
+`scripts/generate-sitemap.mjs`, which writes `sitemap.xml`, points `robots.txt`
+at it, and rewrites `og:image`/`og:url` to absolute URLs. That last part is
+what makes a link pasted into WhatsApp show the logo: a crawler cannot resolve
+a relative image.
+
+Secrets to set on the deployment:
+
+| Secret | Value |
+| --- | --- |
+| `DATABASE_URL` | from the Replit Postgres add-on |
+| `SITE_URL` | `https://mafazmobilitysolutions.com` (the build falls back to this) |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` | from the mail relay, or `SMTP_URL` instead |
+| `MAIL_FROM` | `referrals@mafazmobilitysolutions.com` |
+| `REFERRAL_INBOX` | `info@mafazmedical.com` |
+
+**The two domains are deliberately different.** The site sends *as* the domain
+whose DNS we control (`mafazmobilitysolutions.com`, where the SPF and DKIM
+records live) and delivers *to* the clinic's existing mailbox at
+`mafazmedical.com`. Sending as the destination address through a third-party
+relay is what makes referrals fail SPF and land in spam while the relay still
+reports success — see `MAIL_FROM` above.
+
+Autoscale runs more than one instance and scales to zero. Two consequences:
+the referral rate limiter counts per instance (fine as abuse protection, not a
+global ceiling), and the first request after an idle period pays a cold start.
 
 ## Stack
 
