@@ -66,7 +66,7 @@ const prostheticSolutions = [
   {
     id: "bionic-hands",
     title: "Myoelectric & bionic hands",
-    titleArabic: "الأيدي الكهربائية والبيونية",
+    titleArabic: "الأيدي الكهربائية و BEBIONIC",
     category: "Upper limb",
     description:
       "Intuitive control and precise grip patterns for the moments that matter.",
