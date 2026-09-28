@@ -91,7 +91,7 @@ const orthoticSolutions = [
   {
     id: "scoliosis-bracing",
     title: "Spinal & trunk bracing",
-    titleArabic: "مشادات العمود الفقري",
+    titleArabic: "أجهزة العمود الفقري",
     category: "Spinal & trunk",
     description:
       "Custom support for scoliosis management, post-surgical recovery, and trunk stability.",
