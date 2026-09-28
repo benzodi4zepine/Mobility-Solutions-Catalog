@@ -26,10 +26,21 @@ to the clinical team.
     `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` individually
   - `REFERRAL_INBOX` — where referrals are delivered (defaults to
     `info@mafazmedical.com`)
-  - `MAIL_FROM` — envelope sender, defaults to the inbox address
+  - `MAIL_FROM` — envelope sender. **Set this.** It defaults to the inbox
+    address, which means the clinic mails itself through a third-party relay;
+    unless that relay is authorised to send as `mafazmedical.com`, the message
+    fails SPF/DKIM and is spam-filed or bounced *after* the relay accepted it.
+    The site then truthfully reports `delivered: true` while nothing arrives —
+    the most likely explanation for a "the email isn't working" report where
+    the logs look clean. The server logs a warning at startup when it is unset.
   - With none of these set the API records referrals and reports
     `delivered: false`, and the site asks the referrer to send on WhatsApp
-    instead, so a referral is never silently lost.
+    instead. `delivered: true` means the relay accepted the message, which is
+    all SMTP can tell us — it is not proof it reached the inbox (see
+    `MAIL_FROM`).
+  - If the site must be served from a different origin to the API, set
+    `ALLOWED_ORIGINS` to that origin. CORS is closed by default, so without it
+    the browser blocks the referral POST and the form appears broken.
 
 ## Going live
 

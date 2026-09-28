@@ -56,6 +56,18 @@
   --muted-foreground: 220 8% 43%;
   --accent: 19 89% 54%;
   --accent-foreground: 240 3% 25%;
+  /*
+   * Two contrast-safe partners for the brand orange, which at 54% lightness is
+   * a fine decorative colour and an unreadable one behind text. --accent-text
+   * is the orange to SET text in (4.5:1 on the cream card); --accent-solid is
+   * the orange to put BEHIND white text (4.7:1). The bright original stays for
+   * rules, dots and borders, where contrast rules do not apply.
+   */
+  --accent-text: 19 89% 34%;
+  --accent-solid: 19 89% 42%;
+  /* The brand blue is too dark to read on the charcoal panels; this is the
+     lighter blue for text sitting on --primary (4.3:1 at display sizes). */
+  --secondary-on-dark: 204 100% 60%;
   --brand-green: 148 100% 29%;
   --destructive: 3 60% 48%;
   --destructive-foreground: 40 38% 98%;
@@ -124,3 +136,29 @@
 .product-art-teal { background: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--primary)) 100%); }
 .product-art-coral { background: linear-gradient(135deg, hsl(var(--brand-green)) 0%, hsl(var(--secondary)) 100%); }
 .product-art-cobalt { background: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--brand-green)) 100%); }
+/*
+ * Arabic typography.
+ *
+ * The display headings run at a very tight line-height (.86-.95), which suits
+ * the English serif but not Arabic: the script carries ink well above and below
+ * the Latin x-height band, so descenders and the hamza collide with the line
+ * above. Arabic also wraps to more lines than the same English, so it happens
+ * on most headings rather than the odd one. Relaxing the leading in RTL only
+ * leaves the English display type exactly as designed.
+ */
+[dir='rtl'] h1,
+[dir='rtl'] h2,
+[dir='rtl'] h3 {
+  line-height: 1.25;
+}
+
+/*
+ * The diagonal "go there" arrow points along the reading direction, so in RTL
+ * it has to point up-LEFT. The horizontal arrows and chevrons are already
+ * mirrored with rtl: utilities at their call sites; this catches the diagonal
+ * one everywhere at once, and is skipped inside the language toggle where the
+ * icon is a globe rather than a direction.
+ */
+[dir='rtl'] .lucide-arrow-up-right {
+  transform: scaleX(-1);
+}

@@ -8,7 +8,13 @@ import { usePageMeta } from '@/lib/page-meta';
  * A dead end is recoverable here rather than a full stop: every route out is
  * one tap away.
  */
-export function NotFoundBody({ heading, body }: { heading?: string; body?: string } = {}) {
+/**
+ * `nested` is set when this is rendered inside a page that already owns the
+ * document's <main> - the category page does that for an unknown slug. Two
+ * <main> elements, one inside the other and both id="main", break the landmark
+ * structure and make the skip link's target ambiguous.
+ */
+export function NotFoundBody({ heading, body, nested = false }: { heading?: string; body?: string; nested?: boolean } = {}) {
   const { t } = useLanguage();
   usePageMeta(t('Page not found', 'الصفحة غير موجودة'));
 
@@ -18,7 +24,8 @@ export function NotFoundBody({ heading, body }: { heading?: string; body?: strin
     { href: '/contact', label: t('Contact the clinic', 'تواصل مع العيادة') },
   ];
 
-  return <main id="main" className="page-in mx-auto flex max-w-3xl flex-col items-center px-5 py-24 text-center lg:py-32" data-testid="page-not-found">
+  const Tag = nested ? 'section' : 'main';
+  return <Tag {...(nested ? {} : { id: 'main' })} className="page-in mx-auto flex max-w-3xl flex-col items-center px-5 py-24 text-center lg:py-32" data-testid="page-not-found">
     <div className="grid size-16 place-items-center rounded-full bg-[hsl(var(--secondary)/.12)] text-[hsl(var(--secondary))]"><Compass size={28} /></div>
     <h1 className="mt-7 font-serif text-6xl leading-[.92] tracking-[-.03em]">{heading ?? t('This page moved on.', 'هذه الصفحة لم تعد هنا.')}</h1>
     <p className="mt-6 max-w-md text-base leading-7 text-[hsl(var(--muted-foreground))]">{body ?? t('The link may be out of date. Everything on the site is a step away from here.', 'قد يكون الرابط قديماً. كل ما في الموقع على بُعد خطوة من هنا.')}</p>
@@ -28,7 +35,7 @@ export function NotFoundBody({ heading, body }: { heading?: string; body?: strin
         {route.label}<ArrowUpRight size={16} />
       </Link>)}
     </div>
-  </main>;
+  </Tag>;
 }
 
 export default NotFoundBody;

@@ -3,6 +3,7 @@ import { ArrowUpRight, MessageCircle, ShieldCheck } from 'lucide-react';
 import { useGetCatalogCategory, useGetLocations, useGetSolutions, getGetCatalogCategoryQueryKey, getGetLocationsQueryKey, getGetSolutionsQueryKey } from '@workspace/api-client-react';
 import type { Product, Solution } from '@workspace/api-client-react';
 import { useLanguage } from '@/i18n/language';
+import { termArabic } from '@/i18n/terms';
 import { usePageMeta } from '@/lib/page-meta';
 import { Breadcrumbs } from '@/components/catalog/breadcrumbs';
 import { SolutionImage } from '@/components/catalog/solution-image';
@@ -63,10 +64,10 @@ export function SolutionDetailBody() {
     <section className="grid gap-10 border-b border-[hsl(var(--border))] pb-14 lg:grid-cols-[1fr_1fr] lg:items-start">
       <SolutionGallery imageKey={solution.imageKey} title={title} />
       <div>
-        <div className="flex flex-wrap items-center gap-2"><p dir="auto" className="text-[10px] font-bold uppercase tracking-[.16em] text-[hsl(var(--secondary))]">{solution.category}</p>{solution.comingSoon && <span className="rounded-full bg-[hsl(var(--accent)/.16)] px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[.12em] text-[hsl(var(--accent))]" data-testid="badge-coming-soon">{t('Coming soon', 'قريباً')}</span>}</div>
+        <div className="flex flex-wrap items-center gap-2"><p dir="auto" className="text-[10px] font-bold uppercase tracking-[.16em] text-[hsl(var(--secondary))]">{t(solution.category, termArabic(solution.category))}</p>{solution.comingSoon && <span className="rounded-full bg-[hsl(var(--accent)/.16)] px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[.12em] text-[hsl(var(--accent-text))]" data-testid="badge-coming-soon">{t('Coming soon', 'قريباً')}</span>}</div>
         <h1 className="mt-3 font-serif text-5xl leading-[.92] tracking-[-.03em] md:text-6xl" data-testid="text-solution-title">{title}</h1>
         {solution.brand && <p className="mt-3 text-sm text-[hsl(var(--muted-foreground))]">{t('Brand', 'العلامة التجارية')}: {solution.brand}</p>}
-        <div className="mt-5 flex flex-wrap gap-2">{solution.tags.map(tag => <span key={tag} className="rounded-full bg-[hsl(var(--muted))] px-3 py-1 text-[10px] font-bold uppercase tracking-[.1em] text-[hsl(var(--muted-foreground))]">{tag}</span>)}</div>
+        <div className="mt-5 flex flex-wrap gap-2">{solution.tags.map(tag => <span key={tag} className="rounded-full bg-[hsl(var(--muted))] px-3 py-1 text-[10px] font-bold uppercase tracking-[.1em] text-[hsl(var(--muted-foreground))]">{t(tag, termArabic(tag))}</span>)}</div>
         <p dir="auto" className="mt-6 text-base leading-7 text-[hsl(var(--muted-foreground))]">{t(solution.description, solution.descriptionArabic || solution.description)}</p>
         {solution.longDescription && <p dir="auto" className="mt-4 text-base leading-7 text-[hsl(var(--muted-foreground))]">{t(solution.longDescription, solution.longDescriptionArabic || solution.longDescription)}</p>}
         {solution.comingSoon && <p className="mt-5 rounded-xl bg-[hsl(var(--accent)/.08)] px-4 py-3 text-sm leading-6 text-[hsl(var(--muted-foreground))]" data-testid="text-coming-soon">{t('This range is being added to the clinic. Ask the team and they will tell you when it arrives, or what they can fit in the meantime.', 'تجري إضافة هذه المجموعة إلى العيادة. تواصل مع الفريق ليخبروك بموعد توفّرها، أو بما يمكن تركيبه في الوقت الحالي.')}</p>}

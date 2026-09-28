@@ -10,7 +10,7 @@ export function CatalogIndexBody() {
   usePageMeta(t('Catalog', 'الكتالوج'), t('Search every prosthetic and orthotic solution Mafaz provides.', 'ابحث في كل حلول الأطراف الاصطناعية والأجهزة التقويمية لدى مفاز.'));
   const query = useGetSolutions({ query: { queryKey: getGetSolutionsQueryKey(), staleTime: 300000 } });
 
-  return <main className="page-in mx-auto max-w-7xl px-5 py-14 lg:px-10 lg:py-20">
+  return <main id="main" className="page-in mx-auto max-w-7xl px-5 py-14 lg:px-10 lg:py-20">
     <Breadcrumbs items={[{ label: t('Home', 'الرئيسية'), href: '/' }, { label: t('Catalog', 'الكتالوج') }]} />
     <header className="grid items-end gap-8 border-b border-[hsl(var(--border))] pb-12 md:grid-cols-[1fr_1fr]">
       <div>

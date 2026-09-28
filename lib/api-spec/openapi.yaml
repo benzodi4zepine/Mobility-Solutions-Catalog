@@ -393,6 +393,9 @@ components:
           maxLength: 32
         email:
           type: string
+          # Deliberately no `format: email`: orval emits zod v4's `zod.email()`
+          # for it, which does not exist in the zod 3.25 this workspace pins.
+          # The route checks the shape before using it as a Reply-To.
           maxLength: 254
         patientName:
           type: string

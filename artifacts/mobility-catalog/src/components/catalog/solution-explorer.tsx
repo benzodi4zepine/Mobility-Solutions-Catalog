@@ -3,6 +3,7 @@ import { Link, useLocation, useSearch } from 'wouter';
 import { ArrowUpRight, Search, X } from 'lucide-react';
 import type { Solution } from '@workspace/api-client-react';
 import { useLanguage } from '@/i18n/language';
+import { termArabic } from '@/i18n/terms';
 import { SolutionImage } from './solution-image';
 
 /** Everything a visitor typed or picked, mirrored in the URL so results are shareable. */
@@ -92,13 +93,18 @@ export function SolutionExplorer({ solutions, basePath }: { solutions: Solution[
       </label>
       <div className="flex flex-col gap-3">
         <p className="text-[10px] font-bold uppercase tracking-[.16em] text-[hsl(var(--secondary))]">{t('Clinical area', 'المجال السريري')}</p>
-        <div className="flex flex-wrap gap-2">{allCategories.map(category => <Chip key={category} active={filters.categories.includes(category)} onClick={() => toggle('categories', category)} testId={`filter-category-${category}`}>{category}</Chip>)}</div>
+        <div className="flex flex-wrap gap-2">{allCategories.map(category => <Chip key={category} active={filters.categories.includes(category)} onClick={() => toggle('categories', category)} testId={`filter-category-${category}`}>{t(category, termArabic(category))}</Chip>)}</div>
       </div>
       <div className="flex flex-col gap-3">
         <p className="text-[10px] font-bold uppercase tracking-[.16em] text-[hsl(var(--secondary))]">{t('Features', 'الخصائص')}</p>
-        <div className="flex flex-wrap gap-2">{allTags.map(tag => <Chip key={tag} active={filters.tags.includes(tag)} onClick={() => toggle('tags', tag)} testId={`filter-tag-${tag}`}>{tag}</Chip>)}</div>
+        <div className="flex flex-wrap gap-2">{allTags.map(tag => <Chip key={tag} active={filters.tags.includes(tag)} onClick={() => toggle('tags', tag)} testId={`filter-tag-${tag}`}>{t(tag, termArabic(tag))}</Chip>)}</div>
       </div>
     </div>
+
+    {/* The card titles below are h3. Without this the page jumps h1 to h3, and
+        a screen-reader user navigating by heading loses the level that says
+        where the results start. It is a real heading, just not a visible one. */}
+    <h2 className="sr-only">{t('Solutions', 'الحلول')}</h2>
 
     <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
       <p className="text-sm text-[hsl(var(--muted-foreground))]" data-testid="text-result-count" aria-live="polite">
@@ -124,7 +130,7 @@ export function SolutionExplorer({ solutions, basePath }: { solutions: Solution[
             <Link href={`/catalog/${solution.categorySlug}/${solution.id}`} className="flex flex-1 flex-col" data-testid={`card-solution-${solution.id}`}>
               <SolutionImage imageKey={solution.imageKey} title={t(solution.title, solution.titleArabic)} accent={i % 2 ? 'coral' : 'teal'} />
               <div className="flex flex-1 flex-col p-3">
-                <div className="flex flex-wrap items-center gap-2"><p dir="auto" className="text-[10px] font-bold uppercase tracking-[.14em] text-[hsl(var(--secondary))]">{solution.category}</p>{solution.comingSoon && <span className="rounded-full bg-[hsl(var(--accent)/.16)] px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[.12em] text-[hsl(var(--accent))]" data-testid="badge-coming-soon">{t('Coming soon', 'قريباً')}</span>}</div>
+                <div className="flex flex-wrap items-center gap-2"><p dir="auto" className="text-[10px] font-bold uppercase tracking-[.14em] text-[hsl(var(--secondary))]">{t(solution.category, termArabic(solution.category))}</p>{solution.comingSoon && <span className="rounded-full bg-[hsl(var(--accent)/.16)] px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[.12em] text-[hsl(var(--accent-text))]" data-testid="badge-coming-soon">{t('Coming soon', 'قريباً')}</span>}</div>
                 <h3 className="mt-2 font-serif text-2xl leading-tight">{t(solution.title, solution.titleArabic)}</h3>
                 {solution.products.length > 0 && <p className="mt-1 text-xs font-semibold text-[hsl(var(--secondary))]" data-testid={`count-models-${solution.id}`}>{t(`${solution.products.length} models`, `${solution.products.length} موديلات`)}</p>}
                 <p dir="auto" className="mt-3 flex-1 text-sm leading-6 text-[hsl(var(--muted-foreground))]">{t(solution.description, solution.descriptionArabic || solution.description)}</p>
