@@ -44,35 +44,54 @@ to the clinical team.
 
 ## Going live
 
-The site is deployed on **Replit Autoscale** at
-**https://mafazmobilitysolutions.com**, as one process serving both the built
-client and the API — which is what makes the referral form's relative POST
-work. `.replit` carries the build and run commands; the build ends by running
-`scripts/generate-sitemap.mjs`, which writes `sitemap.xml`, points `robots.txt`
-at it, and rewrites `og:image`/`og:url` to absolute URLs. That last part is
-what makes a link pasted into WhatsApp show the logo: a crawler cannot resolve
-a relative image.
+The site is deployed as a **single Cloudflare Worker** at
+**https://mafazmobilitysolutions.com**. Cloudflare serves the built client from
+the Worker's `ASSETS` binding and the Worker answers `/api/*` itself, so the
+page and the API share an origin — which is what lets the referral form POST to
+a relative path with no CORS involved.
 
-Secrets to set on the deployment:
+First-time setup:
 
-| Secret | Value |
-| --- | --- |
-| `DATABASE_URL` | from the Replit Postgres add-on |
-| `SITE_URL` | `https://mafazmobilitysolutions.com` (the build falls back to this) |
-| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` | from the mail relay, or `SMTP_URL` instead |
-| `MAIL_FROM` | `referrals@mafazmobilitysolutions.com` |
-| `REFERRAL_INBOX` | `info@mafazmedical.com` |
+1. `cd artifacts/worker && npx wrangler login`
+2. `npx wrangler d1 create mafaz-referrals` — paste the returned `database_id`
+   into `wrangler.jsonc`, replacing the placeholder.
+3. `pnpm run migrate` — creates the tables on the real database.
+4. Verify `mafazmobilitysolutions.com` with Resend and add the SPF/DKIM records
+   it gives you. Without this, mail is accepted and then spam-filed.
+5. Set the secrets (these never go in the repo):
+   - `npx wrangler secret put RESEND_API_KEY`
+   - `npx wrangler secret put RATE_LIMIT_SALT` — any long random string
+6. `pnpm run deploy` — builds the client, writes the sitemap, uploads both.
+7. Add the custom domain to the Worker in the Cloudflare dashboard.
 
-**The two domains are deliberately different.** The site sends *as* the domain
-whose DNS we control (`mafazmobilitysolutions.com`, where the SPF and DKIM
-records live) and delivers *to* the clinic's existing mailbox at
-`mafazmedical.com`. Sending as the destination address through a third-party
-relay is what makes referrals fail SPF and land in spam while the relay still
-reports success — see `MAIL_FROM` above.
+`MAIL_FROM` and `REFERRAL_INBOX` are plain vars in `wrangler.jsonc`, since
+neither is a secret.
 
-Autoscale runs more than one instance and scales to zero. Two consequences:
-the referral rate limiter counts per instance (fine as abuse protection, not a
-global ceiling), and the first request after an idle period pays a cold start.
+**The two domains are deliberately different.** The site sends *as*
+`referrals@mafazmobilitysolutions.com` — the domain whose DNS we control, where
+the SPF and DKIM records live — and delivers *to* the clinic's existing mailbox
+at `info@mafazmedical.com`. Sending as the destination address through a
+third-party relay is what makes referrals fail SPF and land in spam while the
+relay still reports success.
+
+### Why the Worker and not the Express server
+
+Both exist. The Worker is what is deployed; `artifacts/api-server` is kept for
+local development and because it is the reference implementation the Worker was
+checked against — the two serve byte-identical catalog payloads, which is worth
+keeping true. Neither holds the catalog: that lives in `lib/catalog` and both
+import it, so a device added once appears in both.
+
+Two things could not be carried across and were rewritten:
+
+- **Email.** Workers run in V8 isolates with no raw TCP sockets, and SMTP needs
+  one for its handshake, so nodemailer cannot run there at any version. The
+  Worker posts to Resend's HTTP API instead.
+- **Rate limiting.** The Express limiter counted in memory. The Worker's lives
+  in D1, keyed on a salted hash of `CF-Connecting-IP` — a header Cloudflare
+  sets and overwrites, so unlike `X-Forwarded-For` behind a Node proxy, a
+  caller cannot forge it to get a fresh quota. The hash means the site keeps no
+  record of who visited.
 
 ## Stack
 

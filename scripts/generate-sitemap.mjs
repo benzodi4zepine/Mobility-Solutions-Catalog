@@ -47,17 +47,17 @@ if (!existsSync(path.join(dist, 'index.html'))) {
 /** Static routes, in the order the router declares them. */
 const staticRoutes = ['/', '/catalog', '/referral', '/contact'];
 
-// Read the catalog straight from the server's route module rather than a second
-// copy, so the sitemap cannot drift from what the site actually serves.
+// Read the catalog straight from the shared package both runtimes serve, rather
+// than a second copy, so the sitemap cannot drift from what the site shows.
 const catalogSource = await readFile(
-  path.resolve(repoRoot, 'artifacts/api-server/src/routes/catalog.ts'),
+  path.resolve(repoRoot, 'lib/catalog/src/index.ts'),
   'utf8',
 );
 const categorySlugs = [...catalogSource.matchAll(/slug:\s*"([a-z-]+)"/g)].map(m => m[1]);
 const solutionIds = [...catalogSource.matchAll(/^\s{4}id:\s*"([a-z0-9-]+)",$/gm)].map(m => m[1]);
 
 if (!categorySlugs.length || !solutionIds.length) {
-  console.error('Could not read categories or solutions out of catalog.ts — not writing a partial sitemap.');
+  console.error('Could not read categories or solutions out of lib/catalog — not writing a partial sitemap.');
   process.exit(1);
 }
 

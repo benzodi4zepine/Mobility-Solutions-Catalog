@@ -1,0 +1,25 @@
+{
+  "name": "@workspace/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter @workspace/mobility-catalog run build && SITE_URL=\"${SITE_URL:-https://mafazmobilitysolutions.com}\" node ../../scripts/generate-sitemap.mjs",
+    "dev": "wrangler dev",
+    "deploy": "pnpm run build && wrangler deploy",
+    "migrate": "wrangler d1 migrations apply mafaz-referrals --remote",
+    "migrate:local": "wrangler d1 migrations apply mafaz-referrals --local",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@workspace/api-zod": "workspace:*",
+    "@workspace/catalog": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250109.0",
+    "typescript": "^5.9.3",
+    "wrangler": "^3.99.0"
+  }
+}

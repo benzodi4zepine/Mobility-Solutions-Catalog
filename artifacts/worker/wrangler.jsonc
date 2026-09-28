@@ -1,0 +1,38 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mafaz-mobility",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-01-09",
+  // The Worker never needs Node's APIs itself, but drizzle and the generated
+  // zod schemas are published as Node packages.
+  "compatibility_flags": ["nodejs_compat"],
+
+  // The built client. `single-page-application` sends an unknown path to
+  // index.html, so /catalog/orthotics/hkafo works on a cold load rather than
+  // 404ing. `run_worker_first` gives every request to the Worker, which hands
+  // anything that is not /api/* straight back to ASSETS - that way /api/* can
+  // never be swallowed by the SPA fallback, and the rule is written once, in
+  // code, instead of duplicated in a route pattern here.
+  "assets": {
+    "directory": "../mobility-catalog/dist/public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": true
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mafaz-referrals",
+      "database_id": "PLACEHOLDER_SET_BY_WRANGLER_D1_CREATE",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  "vars": {
+    "MAIL_FROM": "referrals@mafazmobilitysolutions.com",
+    "REFERRAL_INBOX": "info@mafazmedical.com"
+  },
+
+  "observability": { "enabled": true }
+}
