@@ -111,6 +111,17 @@ const orthoticSolutions = [
     featured: true,
   },
   {
+    id: "thermoplastic-afo",
+    title: "Thermoplastic AFOs",
+    titleArabic: "أجهزة AFO البلاستيكية الحرارية",
+    category: "Lower limb",
+    description:
+      "Custom-moulded ankle-foot support with a cushioned lining and adjustable straps, made in a range of finishes.",
+    tags: ["AFO", "Thermoplastic", "Custom"],
+    imageKey: "thermoplastic-afo",
+    featured: false,
+  },
+  {
     id: "custom-kafo",
     title: "Custom KAFOs",
     titleArabic: "أجهزة KAFO المخصصة",
