@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "mafaz-mobility",
+  "name": "mobility-solutions-catalog",
   "account_id": "deceb87d47b4671bf032de86325086dd",
   "main": "src/index.ts",
   "compatibility_date": "2025-01-09",
