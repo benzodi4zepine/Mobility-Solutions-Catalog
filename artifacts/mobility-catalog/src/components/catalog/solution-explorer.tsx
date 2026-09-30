@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useSearch } from 'wouter';
-import { ArrowUpRight, Search, X } from 'lucide-react';
+import { ArrowUpRight, Search, X, MessageCircleQuestion } from 'lucide-react';
 import type { Solution } from '@workspace/api-client-react';
 import { useLanguage } from '@/i18n/language';
 import { termArabic } from '@/i18n/terms';
@@ -123,7 +123,10 @@ export function SolutionExplorer({ solutions, basePath }: { solutions: Solution[
       ? <div className="mt-8 rounded-[1.4rem] border border-dashed border-[hsl(var(--border))] p-12 text-center" data-testid="empty-state">
           <p className="font-serif text-3xl">{t('Nothing matches yet.', 'لا توجد نتائج بعد.')}</p>
           <p className="mt-3 text-sm text-[hsl(var(--muted-foreground))]">{t('Try a different word, or clear the filters to see the whole catalog.', 'جرّب كلمة أخرى، أو امسح عوامل التصفية لعرض الكتالوج كاملاً.')}</p>
-          <button type="button" onClick={() => navigate(basePath, { replace: true })} className="mt-6 rounded-full bg-[hsl(var(--primary))] px-5 py-2.5 text-xs font-bold text-[hsl(var(--primary-foreground))]" data-testid="button-empty-clear">{t('Clear filters', 'مسح عوامل التصفية')}</button>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <button type="button" onClick={() => navigate(basePath, { replace: true })} className="rounded-full bg-[hsl(var(--primary))] px-5 py-2.5 text-xs font-bold text-[hsl(var(--primary-foreground))]" data-testid="button-empty-clear">{t('Clear filters', 'مسح عوامل التصفية')}</button>
+            <Link href="/request" className="rounded-full border border-[hsl(var(--border))] px-5 py-2.5 text-xs font-bold transition hover:border-[hsl(var(--secondary))] hover:text-[hsl(var(--secondary))]" data-testid="link-empty-request">{t('Ask about it anyway', 'اسأل عنه على أي حال')}</Link>
+          </div>
         </div>
       : <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {results.map((solution, i) => <article key={solution.id} className="group flex flex-col rounded-[1.5rem] border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3 transition hover:-translate-y-1 hover:shadow-xl" data-testid={`solution-${solution.id}`}>
@@ -139,6 +142,21 @@ export function SolutionExplorer({ solutions, basePath }: { solutions: Solution[
             </Link>
             <Link href={`/referral?solution=${encodeURIComponent(solution.id)}&area=${encodeURIComponent(solution.categorySlug)}`} className="mx-3 mb-2 mt-1 text-xs font-bold text-[hsl(var(--muted-foreground))] transition-colors hover:text-[hsl(var(--secondary))]" data-testid={`link-solution-referral-${solution.id}`}>{t('Discuss this solution', 'ناقش هذا الحل')}</Link>
           </article>)}
+
+          {/* The catalog lists what the clinic fits most often, not everything it
+              can make. Without this the grid simply ends, and someone whose
+              device is not here has nowhere to go. It sits last so it reads as
+              "and if none of these are it", and is styled as an invitation
+              rather than a product so it cannot be mistaken for one. */}
+          <Link href="/request" data-testid="card-request-service"
+            className="group flex flex-col justify-between rounded-[1.5rem] border border-dashed border-[hsl(var(--secondary)/.45)] bg-[hsl(var(--secondary)/.06)] p-6 transition hover:-translate-y-1 hover:border-[hsl(var(--secondary))] hover:shadow-xl">
+            <div>
+              <span className="grid size-10 place-items-center rounded-full bg-[hsl(var(--secondary)/.14)] text-[hsl(var(--secondary))]"><MessageCircleQuestion size={19} /></span>
+              <h3 className="mt-5 font-serif text-2xl leading-tight">{t('Need something not listed?', 'تحتاج شيئاً غير مذكور؟')}</h3>
+              <p className="mt-3 text-sm leading-6 text-[hsl(var(--muted-foreground))]">{t('An unusual splint, a one-off, or a device you have been told about but cannot find here. Describe it and the team will tell you whether they can make it.', 'جبيرة غير اعتيادية، أو قطعة خاصة، أو جهاز سمعت عنه ولم تجده هنا. صِفه وسيخبرك الفريق إن كان بالإمكان صنعه.')}</p>
+            </div>
+            <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-[hsl(var(--secondary))]">{t('Ask the team', 'اسأل الفريق')} <ArrowUpRight size={14} className="transition-transform group-hover:-translate-y-0.5" /></span>
+          </Link>
         </div>}
   </div>;
 }

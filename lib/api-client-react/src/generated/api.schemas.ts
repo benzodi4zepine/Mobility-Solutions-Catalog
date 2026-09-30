@@ -140,6 +140,17 @@ export const ReferralInputPreferredContact = {
   email: 'email',
 } as const;
 
+/**
+ * What kind of message this is. `referral` is a clinician referring a patient; `enquiry` is someone asking about a device or service the catalog does not list. The clinic needs to tell the two apart at a glance, so it sets the subject line. Defaults to `referral`.
+ */
+export type ReferralInputRequestType = typeof ReferralInputRequestType[keyof typeof ReferralInputRequestType];
+
+
+export const ReferralInputRequestType = {
+  referral: 'referral',
+  enquiry: 'enquiry',
+} as const;
+
 export interface ReferralInput {
   /**
      * @minLength 2
@@ -150,7 +161,7 @@ export interface ReferralInput {
      * @minLength 2
      * @maxLength 160
      */
-  organization: string;
+  organization?: string;
   /**
      * @minLength 5
      * @maxLength 32
@@ -175,6 +186,8 @@ export interface ReferralInput {
      */
   clinicalNotes: string;
   preferredContact: ReferralInputPreferredContact;
+  /** What kind of message this is. `referral` is a clinician referring a patient; `enquiry` is someone asking about a device or service the catalog does not list. The clinic needs to tell the two apart at a glance, so it sets the subject line. Defaults to `referral`. */
+  requestType?: ReferralInputRequestType;
 }
 
 export interface ReferralReceipt {

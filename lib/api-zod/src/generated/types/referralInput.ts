@@ -7,6 +7,7 @@
  */
 import type { ReferralInputAreaOfNeed } from './referralInputAreaOfNeed';
 import type { ReferralInputPreferredContact } from './referralInputPreferredContact';
+import type { ReferralInputRequestType } from './referralInputRequestType';
 
 export interface ReferralInput {
   /**
@@ -18,7 +19,7 @@ export interface ReferralInput {
      * @minLength 2
      * @maxLength 160
      */
-  organization: string;
+  organization?: string;
   /**
      * @minLength 5
      * @maxLength 32
@@ -43,4 +44,6 @@ export interface ReferralInput {
      */
   clinicalNotes: string;
   preferredContact: ReferralInputPreferredContact;
+  /** What kind of message this is. `referral` is a clinician referring a patient; `enquiry` is someone asking about a device or service the catalog does not list. The clinic needs to tell the two apart at a glance, so it sets the subject line. Defaults to `referral`. */
+  requestType?: ReferralInputRequestType;
 }

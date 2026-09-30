@@ -55,7 +55,14 @@ router.post("/referrals", referralLimiter, async (req, res) => {
   // decides what we are entitled to tell the referrer afterwards.
   let stored = false;
   try {
-    await db.insert(referralsTable).values({ id, ...referral, createdAt: receivedAt });
+    // The column is NOT NULL, and an enquiry legitimately has no organisation
+    // behind it, so an absent one is stored as blank rather than refused.
+    await db.insert(referralsTable).values({
+      id,
+      ...referral,
+      organization: referral.organization ?? "",
+      createdAt: receivedAt,
+    });
     stored = true;
   } catch (err) {
     // Only the reason, never the error object: a failed insert carries the
@@ -67,20 +74,25 @@ router.post("/referrals", referralLimiter, async (req, res) => {
     );
   }
 
+  // An enquiry is someone asking about something the catalog does not list,
+  // so it reads differently and must not be mistaken for a clinical referral.
+  const isEnquiry = referral.requestType === "enquiry";
+  const heading = isEnquiry ? "Enquiry" : "Referral";
+
   const lines = [
-    `Referral ${id} via the Mafaz website`,
+    `${heading} ${id} via the Mafaz website`,
     "",
     `Referrer: ${referral.referrerName}`,
-    `Organization: ${referral.organization}`,
+    referral.organization ? `Organization: ${referral.organization}` : null,
     `Phone: ${referral.phone}`,
     referral.email ? `Email: ${referral.email}` : null,
     `Preferred contact: ${referral.preferredContact}`,
     "",
-    `Patient: ${referral.patientName}`,
+    `${isEnquiry ? "Person" : "Patient"}: ${referral.patientName}`,
     referral.patientAge ? `Age: ${referral.patientAge}` : null,
     `Area of need: ${referral.areaOfNeed}`,
     "",
-    `Notes: ${referral.clinicalNotes}`,
+    `${isEnquiry ? "What they are asking for" : "Notes"}: ${referral.clinicalNotes}`,
     "",
     `Received: ${receivedAt.toISOString()}`,
     // Drop only the omitted optional fields. filter(Boolean) would take the ""
@@ -94,7 +106,7 @@ router.post("/referrals", referralLimiter, async (req, res) => {
     referral.email && /^[^\s@]+@[^\s@.]+\.[^\s@]+$/.test(referral.email) ? referral.email : undefined;
 
   const delivered = await sendReferralEmail(
-    `New referral ${id} - ${referral.patientName}`,
+    `New ${isEnquiry ? "enquiry" : "referral"} ${id} - ${referral.patientName}`,
     lines.join("\n"),
     replyTo,
   );
@@ -106,9 +118,9 @@ router.post("/referrals", referralLimiter, async (req, res) => {
   // neither worked, the referrer's own copy is the only one that exists, and
   // they need to be told that rather than reassured.
   const message = delivered
-    ? "Referral sent to the clinical team. They will be in touch shortly."
+    ? `${heading} sent to the clinical team. They will be in touch shortly.`
     : stored
-      ? "Referral recorded. Please also send it on WhatsApp so the team sees it right away."
+      ? `${heading} recorded. Please also send it on WhatsApp so the team sees it right away.`
       : "We could not deliver or record this referral. Please send it on WhatsApp, or copy it below and email the clinic.";
 
   res.status(201).json(

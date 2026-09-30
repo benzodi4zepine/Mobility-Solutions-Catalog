@@ -15,6 +15,7 @@ export * from './product';
 export * from './referralInput';
 export * from './referralInputAreaOfNeed';
 export * from './referralInputPreferredContact';
+export * from './referralInputRequestType';
 export * from './referralReceipt';
 export * from './solution';
 export * from './solutionSpec';

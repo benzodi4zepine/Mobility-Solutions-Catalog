@@ -98,7 +98,7 @@ export async function handleReferral(request: Request, env: Env): Promise<Respon
     await db.insert(referralsTable).values({
       id,
       referrerName: referral.referrerName,
-      organization: referral.organization,
+      organization: referral.organization ?? "",
       phone: referral.phone,
       email: referral.email ?? null,
       patientName: referral.patientName,
@@ -115,20 +115,25 @@ export async function handleReferral(request: Request, env: Env): Promise<Respon
     console.error("referral not stored", id, err instanceof Error ? err.name : "unknown");
   }
 
+  // An enquiry is someone asking about something the catalog does not list,
+  // so it reads differently and must not be mistaken for a clinical referral.
+  const isEnquiry = referral.requestType === "enquiry";
+  const heading = isEnquiry ? "Enquiry" : "Referral";
+
   const lines = [
-    `Referral ${id} via the Mafaz website`,
+    `${heading} ${id} via the Mafaz website`,
     "",
     `Referrer: ${referral.referrerName}`,
-    `Organization: ${referral.organization}`,
+    referral.organization ? `Organization: ${referral.organization}` : null,
     `Phone: ${referral.phone}`,
     referral.email ? `Email: ${referral.email}` : null,
     `Preferred contact: ${referral.preferredContact}`,
     "",
-    `Patient: ${referral.patientName}`,
+    `${isEnquiry ? "Person" : "Patient"}: ${referral.patientName}`,
     referral.patientAge ? `Age: ${referral.patientAge}` : null,
     `Area of need: ${referral.areaOfNeed}`,
     "",
-    `Notes: ${referral.clinicalNotes}`,
+    `${isEnquiry ? "What they are asking for" : "Notes"}: ${referral.clinicalNotes}`,
     "",
     `Received: ${receivedAt.toISOString()}`,
     // Drop only the omitted optional fields. filter(Boolean) would take the ""
@@ -144,7 +149,7 @@ export async function handleReferral(request: Request, env: Env): Promise<Respon
 
   const { delivered, reason } = await sendReferralEmail(
     env as MailEnv,
-    `New referral ${id} - ${referral.patientName}`,
+    `New ${isEnquiry ? "enquiry" : "referral"} ${id} - ${referral.patientName}`,
     lines.join("\n"),
     replyTo,
   );
@@ -173,9 +178,9 @@ export async function handleReferral(request: Request, env: Env): Promise<Respon
   // did not but the write landed, there is at least a record to recover. When
   // neither worked, the referrer's own copy is the only one that exists.
   const message = delivered
-    ? "Referral sent to the clinical team. They will be in touch shortly."
+    ? `${heading} sent to the clinical team. They will be in touch shortly.`
     : stored
-      ? "Referral recorded. Please also send it on WhatsApp so the team sees it right away."
+      ? `${heading} recorded. Please also send it on WhatsApp so the team sees it right away.`
       : "We could not deliver or record this referral. Please send it on WhatsApp, or copy it below and email the clinic.";
 
   return json(CreateReferralResponse.parse({
