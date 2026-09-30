@@ -1,6 +1,7 @@
 import { Router, type IRouter } from "express";
 import { db, referralsTable } from "@workspace/db";
 import { sendReferralEmail } from "../lib/mailer";
+import { checkPhoto } from "../lib/photo";
 import { rateLimit } from "../lib/rate-limit";
 import {
   CreateReferralBody,
@@ -57,9 +58,13 @@ router.post("/referrals", referralLimiter, async (req, res) => {
   try {
     // The column is NOT NULL, and an enquiry legitimately has no organisation
     // behind it, so an absent one is stored as blank rather than refused.
+    // `photo` and `requestType` are not columns: the photograph is emailed and
+    // deliberately not kept, and the type only shapes the subject line. Spreading
+    // the whole payload would hand drizzle keys the table has never heard of.
+    const { photo: _photo, requestType: _requestType, ...columns } = referral;
     await db.insert(referralsTable).values({
       id,
-      ...referral,
+      ...columns,
       organization: referral.organization ?? "",
       createdAt: receivedAt,
     });
@@ -105,10 +110,20 @@ router.post("/referrals", referralLimiter, async (req, res) => {
   const replyTo =
     referral.email && /^[^\s@]+@[^\s@.]+\.[^\s@]+$/.test(referral.email) ? referral.email : undefined;
 
+  // A photograph is a convenience, never a condition: if it fails the check
+  // the message still goes, with a line saying the picture was dropped, rather
+  // than the whole enquiry being refused over an attachment.
+  const photo = referral.photo ? checkPhoto(referral.photo) : null;
+  if (photo && !photo.ok) {
+    req.log.warn({ referralId: id, reason: photo.reason }, "Referral photo rejected");
+    lines.push("", `(A photograph was attached but could not be read: ${photo.reason})`);
+  }
+
   const delivered = await sendReferralEmail(
     `New ${isEnquiry ? "enquiry" : "referral"} ${id} - ${referral.patientName}`,
     lines.join("\n"),
     replyTo,
+    photo?.ok ? [{ filename: `${id}.jpg`, content: photo.base64 }] : undefined,
   );
 
   req.log.info({ referralId: id, delivered, stored }, "Referral received");

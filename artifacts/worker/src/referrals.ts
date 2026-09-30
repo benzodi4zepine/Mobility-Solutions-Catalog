@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { CreateReferralBody, CreateReferralResponse } from "@workspace/api-zod";
 import { referralsTable, rateLimitTable } from "./schema";
 import { sendReferralEmail, type MailEnv } from "./mailer";
+import { checkPhoto } from "./photo";
 import type { Env } from "./index";
 
 const WINDOW_MS = 15 * 60 * 1000;
@@ -147,11 +148,21 @@ export async function handleReferral(request: Request, env: Env): Promise<Respon
       ? referral.email
       : undefined;
 
+  // A photograph is a convenience, never a condition: if it fails the check
+  // the message still goes, with a line saying the picture was dropped, rather
+  // than the whole enquiry being refused over an attachment.
+  const photo = referral.photo ? checkPhoto(referral.photo) : null;
+  if (photo && !photo.ok) {
+    console.error("referral photo rejected", id, photo.reason);
+    lines.push("", `(A photograph was attached but could not be read: ${photo.reason})`);
+  }
+
   const { delivered, reason } = await sendReferralEmail(
     env as MailEnv,
     `New ${isEnquiry ? "enquiry" : "referral"} ${id} - ${referral.patientName}`,
     lines.join("\n"),
     replyTo,
+    photo?.ok ? [{ filename: `${id}.jpg`, content: photo.base64 }] : undefined,
   );
   if (!delivered) console.error("referral not emailed", id, reason ?? "unknown");
 

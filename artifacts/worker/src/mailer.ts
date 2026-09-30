@@ -40,11 +40,14 @@ export function referralInbox(e: MailEnv): string {
   return env(e.REFERRAL_INBOX) ?? "info@mafazmedical.com";
 }
 
+export type Attachment = { filename: string; content: string };
+
 export async function sendReferralEmail(
   e: MailEnv,
   subject: string,
   text: string,
   replyTo?: string,
+  attachments?: Attachment[],
 ): Promise<{ delivered: boolean; reason?: string }> {
   const key = env(e.RESEND_API_KEY);
   if (!key) return { delivered: false, reason: "no-api-key" };
@@ -65,6 +68,7 @@ export async function sendReferralEmail(
         subject,
         text,
         ...(replyTo ? { reply_to: replyTo } : {}),
+        ...(attachments && attachments.length ? { attachments } : {}),
       }),
       // A hanging mail API must not hold the referrer's request open; the page
       // falls back to WhatsApp far sooner than they would wait.

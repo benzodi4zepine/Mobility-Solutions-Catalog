@@ -415,6 +415,17 @@ components:
         preferredContact:
           type: string
           enum: [phone, whatsapp, email]
+        photo:
+          type: string
+          description: >-
+            An optional photograph of the device the sender is asking about,
+            as base64 JPEG with no data-URI prefix. The browser re-encodes
+            whatever was chosen down to a small JPEG before sending, which also
+            strips EXIF, so what arrives is never the original camera file. The
+            server checks the bytes really are a JPEG and refuses anything
+            larger than roughly 2MB. It is attached to the email and is not
+            stored in the database.
+          maxLength: 2800000
         requestType:
           type: string
           description: >-

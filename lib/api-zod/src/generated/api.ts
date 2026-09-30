@@ -216,6 +216,8 @@ export const createReferralBodyPatientAgeMax = 120;
 export const createReferralBodyClinicalNotesMin = 10;
 export const createReferralBodyClinicalNotesMax = 4000;
 
+export const createReferralBodyPhotoMax = 2800000;
+
 
 
 export const CreateReferralBody = zod.object({
@@ -228,6 +230,7 @@ export const CreateReferralBody = zod.object({
   "areaOfNeed": zod.enum(['prosthetics', 'orthotics', 'other']),
   "clinicalNotes": zod.string().min(createReferralBodyClinicalNotesMin).max(createReferralBodyClinicalNotesMax),
   "preferredContact": zod.enum(['phone', 'whatsapp', 'email']),
+  "photo": zod.string().max(createReferralBodyPhotoMax).optional().describe('An optional photograph of the device the sender is asking about, as base64 JPEG with no data-URI prefix. The browser re-encodes whatever was chosen down to a small JPEG before sending, which also strips EXIF, so what arrives is never the original camera file. The server checks the bytes really are a JPEG and refuses anything larger than roughly 2MB. It is attached to the email and is not stored in the database.'),
   "requestType": zod.enum(['referral', 'enquiry']).optional().describe('What kind of message this is. `referral` is a clinician referring a patient; `enquiry` is someone asking about a device or service the catalog does not list. The clinic needs to tell the two apart at a glance, so it sets the subject line. Defaults to `referral`.')
 })
 

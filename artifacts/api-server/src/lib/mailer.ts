@@ -101,10 +101,13 @@ export function referralInbox(): string {
   return env("REFERRAL_INBOX") ?? "info@mafazmedical.com";
 }
 
+export type Attachment = { filename: string; content: string };
+
 export async function sendReferralEmail(
   subject: string,
   text: string,
   replyTo?: string,
+  attachments?: Attachment[],
 ): Promise<boolean> {
   let transport: Transporter | null;
   try {
@@ -122,6 +125,9 @@ export async function sendReferralEmail(
       subject,
       text,
       ...(replyTo ? { replyTo } : {}),
+      ...(attachments && attachments.length
+        ? { attachments: attachments.map((a) => ({ filename: a.filename, content: a.content, encoding: "base64" })) }
+        : {}),
     });
     return true;
   } catch (err) {

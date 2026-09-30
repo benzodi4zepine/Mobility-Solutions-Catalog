@@ -42,7 +42,11 @@ app.use(
 // Rate limiting keys on the client address, which is only meaningful when the
 // proxy in front of the app is trusted.
 app.set("trust proxy", 1);
-app.use(express.json());
+// The enquiry form can carry a photograph, which the browser shrinks to a few
+// hundred KB before sending. The 100KB default rejected those outright, so the
+// picture never reached the mailer. 4MB leaves room for the 2MB ceiling the
+// photo check enforces, once base64 has added its third.
+app.use(express.json({ limit: "4mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
@@ -94,6 +98,15 @@ if (existsSync(path.join(clientDist, "index.html"))) {
 app.use(((err, req, res, _next) => {
   req.log?.error({ err }, "Unhandled error");
   if (res.headersSent) return;
+  // A body that is too large is the client's to fix, and saying so is more use
+  // than a blanket 500 - that is how an oversized photograph looked like the
+  // server falling over.
+  const status = (err as { status?: number; statusCode?: number })?.status
+    ?? (err as { statusCode?: number })?.statusCode;
+  if (status === 413) {
+    res.status(413).json({ error: "That attachment is too large. Please send a smaller picture." });
+    return;
+  }
   res.status(500).json({ error: "Something went wrong. Please try again." });
 }) satisfies ErrorRequestHandler);
 
