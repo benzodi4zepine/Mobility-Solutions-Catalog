@@ -3,6 +3,7 @@
   * Usage: node scripts/crop-solution-photo.mjs <src> <out> [aspectW:aspectH] [maxEdge] [quality]
  */
 import { readFile, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 
 const [src, out, aspect = '4:5', maxEdge = '1400', quality = '0.85'] = process.argv.slice(2);
@@ -10,7 +11,17 @@ const [aw, ah] = aspect.split(':').map(Number);
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
-const dataUri = `data:image/jpeg;base64,${(await readFile(src)).toString('base64')}`;
+// Infer the type from the extension rather than claiming JPEG for everything:
+// a mislabelled data URI is at the mercy of the browser's content sniffing,
+// which is not a thing to leave a build depending on.
+const MIME = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.avif': 'image/avif' };
+const ext = path.extname(src).toLowerCase();
+const mime = MIME[ext];
+if (!mime) {
+  console.error(`Unsupported input type "${ext}" for ${src}`);
+  process.exit(1);
+}
+const dataUri = `data:${mime};base64,${(await readFile(src)).toString('base64')}`;
 
 const result = await page.evaluate(async ({ dataUri, aw, ah, maxEdge, quality }) => {
   const img = new Image();
