@@ -39,8 +39,23 @@ const result = await page.evaluate(async ({ dataUri, aw, ah, maxEdge, quality })
   // black strapping. Neutral-vs-saturated separates them far more reliably
   // than distance from a sampled background tone, which the backdrop's own
   // gradient defeats.
-  const corner = (x, y) => { const i = (y * W + x) * 4; return (data[i] + data[i + 1] + data[i + 2]) / 3; };
-  const bgLum = (corner(2, 2) + corner(W - 3, 2) + corner(2, H - 3) + corner(W - 3, H - 3)) / 4;
+  // Average a small patch at each corner rather than a single pixel, so one
+  // noisy pixel cannot define the backdrop.
+  const cornerRgb = (cx0, cy0) => {
+    let r = 0, g = 0, b = 0, n = 0;
+    for (let y = cy0; y < cy0 + 8; y++) {
+      for (let x = cx0; x < cx0 + 8; x++) {
+        const i = (y * W + x) * 4;
+        r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
+      }
+    }
+    return [r / n, g / n, b / n];
+  };
+  const corners = [cornerRgb(2, 2), cornerRgb(W - 11, 2), cornerRgb(2, H - 11), cornerRgb(W - 11, H - 11)];
+  const bgRgb = corners
+    .reduce((a, c) => [a[0] + c[0], a[1] + c[1], a[2] + c[2]], [0, 0, 0])
+    .map((v) => Math.round(v / corners.length));
+  const bgLum = (bgRgb[0] + bgRgb[1] + bgRgb[2]) / 3;
 
   const cols = new Int32Array(W), rows = new Int32Array(H);
   for (let y = 0; y < H; y++) {
@@ -72,13 +87,32 @@ const result = await page.evaluate(async ({ dataUri, aw, ah, maxEdge, quality })
   if (have < want) { const nw = bh * want; x0 = cx - nw / 2; x1 = cx + nw / 2; bw = nw; }
   else { const nh = bw / want; y0 = cy - nh / 2; y1 = cy + nh / 2; bh = nh; }
 
+  // Growing the short side can run the window off the photo, which leaves a
+  // band of flat backdrop down one edge. Taking a smaller window that still
+  // fits is better: it is all real photograph, and the subject only loses the
+  // breathing room the 7% pad added. Shrink to fit, keeping the aspect, and
+  // slide back inside the frame. Only when the subject itself is wider or
+  // taller than the window does this give up and let the fill show.
+  const shrink = Math.min(1, W / bw, H / bh);
+  if (shrink < 1) {
+    const fw = bw * shrink, fh = bh * shrink;
+    const fx = Math.min(Math.max(cx - fw / 2, 0), W - fw);
+    const fy = Math.min(Math.max(cy - fh / 2, 0), H - fh);
+    const holdsSubject = fx <= minX && fy <= minY && fx + fw >= maxX + 1 && fy + fh >= maxY + 1;
+    if (holdsSubject) { x0 = fx; y0 = fy; bw = fw; bh = fh; }
+  }
+
   const scale = Math.min(1, maxEdge / Math.max(bw, bh));
   const cw = Math.round(bw * scale), ch = Math.round(bh * scale);
   const canvas = document.createElement('canvas');
   canvas.width = cw; canvas.height = ch;
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingQuality = 'high';
-  ctx.fillStyle = '#ffffff';       // any part of the crop that falls outside the photo stays white
+  // Fill with the photo's own backdrop, not pure white. A tall narrow shot
+  // cannot reach 4:5 without the crop running off the sides, and white padding
+  // against a studio backdrop that is a shade warmer leaves a visible seam down
+  // the edge of the card.
+  ctx.fillStyle = `rgb(${bgRgb[0]}, ${bgRgb[1]}, ${bgRgb[2]})`;
   ctx.fillRect(0, 0, cw, ch);
   ctx.drawImage(img, x0, y0, bw, bh, 0, 0, cw, ch);
   const blob = await new Promise((res) => canvas.toBlob(res, 'image/webp', quality));
