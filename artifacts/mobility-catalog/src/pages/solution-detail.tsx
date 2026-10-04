@@ -85,7 +85,7 @@ export function SolutionDetailBody() {
       </div>
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {solution.products.map((product: Product) => <article key={product.id} className="flex flex-col rounded-[1.5rem] border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3" data-testid={`product-${product.id}`}>
-          <SolutionImage imageKey={product.imageKey} title={t(product.name, product.nameArabic || product.name)} />
+          {product.imageKey && <SolutionImage imageKey={product.imageKey} title={t(product.name, product.nameArabic || product.name)} />}
           <div className="flex flex-1 flex-col p-3">
             {product.brand && <p dir="auto" className="text-[10px] font-bold uppercase tracking-[.14em] text-[hsl(var(--secondary))]">{product.brand}</p>}
             <h3 dir="auto" className="mt-2 font-serif text-2xl leading-tight">{t(product.name, product.nameArabic || product.name)}</h3>

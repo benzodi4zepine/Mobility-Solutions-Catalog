@@ -294,7 +294,6 @@ components:
       required:
         - id
         - name
-        - imageKey
     SolutionSpec:
       type: object
       properties:

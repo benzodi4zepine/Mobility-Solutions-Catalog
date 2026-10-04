@@ -205,6 +205,19 @@ const orthoticSolutions = [
     featured: false,
   },
   {
+    id: "arch-support",
+    title: "Arch supports",
+    titleArabic: "دعامات القوس",
+    category: "Foot orthotics",
+    description:
+      "Moulded foot orthoses with a contoured arch and a perforated surface, shaped to the foot and worn inside an ordinary shoe.",
+    descriptionArabic:
+      "دعامات قدم مصبوبة بقوس محدّد وسطح مثقّب، تُشكَّل على القدم وتُلبس داخل حذاء عادي.",
+    tags: ["Arch support", "Custom", "Comfort"],
+    imageKey: "arch-support",
+    featured: false,
+  },
+  {
     id: "custom-insoles",
     title: "Custom insoles",
     titleArabic: "الضبانات الطبية المخصصة",
@@ -267,7 +280,12 @@ type Product = {
   brand?: string;
   description?: string;
   descriptionArabic?: string;
-  imageKey: string;
+  /**
+   * A photograph, when there is one. A variant such as "HKAFO with joints" is
+   * a meaningful thing to list even where no separate picture of it exists,
+   * and a placeholder box for every one of those would look worse than none.
+   */
+  imageKey?: string;
   tags?: string[];
 };
 
@@ -287,6 +305,43 @@ type Product = {
  * clinical team has approved - product claims are theirs to make, not ours.
  */
 const productsBySolution: Record<string, Product[]> = {
+  // The clinic's own list of what it fits under each family. These are
+  // variants rather than separate products, which is why they live here and
+  // not as cards of their own: one HKAFO card listing both joint options reads
+  // better than two cards a visitor has to tell apart.
+  hkafo: [
+    {
+      id: "hkafo-no-joints",
+      name: "HKAFO without joints",
+      nameArabic: "جهاز HKAFO بدون مفاصل",
+    },
+    {
+      id: "hkafo-joints",
+      name: "HKAFO with joints",
+      nameArabic: "جهاز HKAFO بمفاصل",
+    },
+  ],
+
+  // Upper limb, by level. The same three levels repeat under each technology,
+  // so the card is the technology and the levels are listed beneath it.
+  "passive-upper-limb": [
+    { id: "cosmetic-tr", name: "Cosmetic — below elbow (transradial)", nameArabic: "تجميلي — تحت المرفق" },
+    { id: "cosmetic-th", name: "Cosmetic — above elbow (transhumeral)", nameArabic: "تجميلي — فوق المرفق" },
+    { id: "cosmetic-sd", name: "Cosmetic — shoulder disarticulation", nameArabic: "تجميلي — فصل الكتف" },
+    { id: "mech-tr", name: "Mechanical — below elbow (transradial)", nameArabic: "ميكانيكي — تحت المرفق" },
+    { id: "mech-th", name: "Mechanical — above elbow (transhumeral)", nameArabic: "ميكانيكي — فوق المرفق" },
+    { id: "mech-sd", name: "Mechanical — shoulder disarticulation", nameArabic: "ميكانيكي — فصل الكتف" },
+  ],
+
+  "bionic-hands": [
+    { id: "myo-tr", name: "Myoelectric — below elbow (transradial)", nameArabic: "كهربائي عضلي — تحت المرفق" },
+    { id: "myo-th", name: "Myoelectric — above elbow (transhumeral)", nameArabic: "كهربائي عضلي — فوق المرفق" },
+    { id: "myo-sd", name: "Myoelectric — shoulder disarticulation", nameArabic: "كهربائي عضلي — فصل الكتف" },
+    { id: "bebionic-tr", name: "BEBIONIC — below elbow (transradial)", nameArabic: "BEBIONIC — تحت المرفق", brand: "Ottobock" },
+    { id: "bebionic-th", name: "BEBIONIC — above elbow (transhumeral)", nameArabic: "BEBIONIC — فوق المرفق", brand: "Ottobock" },
+    { id: "bebionic-sd", name: "BEBIONIC — shoulder disarticulation", nameArabic: "BEBIONIC — فصل الكتف", brand: "Ottobock" },
+  ],
+
   // "smart-knees": [
   //   { id: "example", name: "Model name", brand: "Ottobock", imageKey: "example", description: "One line the clinical team approves." },
   // ],

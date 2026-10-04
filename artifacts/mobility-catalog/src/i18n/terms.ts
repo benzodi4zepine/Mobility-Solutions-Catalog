@@ -39,6 +39,7 @@ const TERMS: Record<string, string> = {
   Stability: 'الثبات',
   'Knee joints': 'مفاصل الركبة',
   'Pelvic section': 'جزء حوضي',
+  'Arch support': 'دعامة القوس',
   'Pressure care': 'العناية بالضغط',
   Comfort: 'الراحة',
   'Diabetic care': 'العناية بالسكري',

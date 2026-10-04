@@ -38,7 +38,7 @@ export interface Product {
   description?: string;
   descriptionArabic?: string;
   /** Matches a file in attached_assets/solutions/. */
-  imageKey: string;
+  imageKey?: string;
   tags?: string[];
 }
 

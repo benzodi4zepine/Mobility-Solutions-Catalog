@@ -61,7 +61,7 @@ export const GetCatalogOverviewResponse = zod.object({
   "brand": zod.string().optional(),
   "description": zod.string().optional(),
   "descriptionArabic": zod.string().optional(),
-  "imageKey": zod.string().describe('Matches a file in attached_assets\/solutions\/.'),
+  "imageKey": zod.string().optional().describe('Matches a file in attached_assets\/solutions\/.'),
   "tags": zod.array(zod.string()).optional()
 }).describe('An individual model fitted under a solution.')).describe('Individual models fitted under this solution.')
 })),
@@ -117,7 +117,7 @@ export const GetCatalogCategoryResponse = zod.object({
   "brand": zod.string().optional(),
   "description": zod.string().optional(),
   "descriptionArabic": zod.string().optional(),
-  "imageKey": zod.string().describe('Matches a file in attached_assets\/solutions\/.'),
+  "imageKey": zod.string().optional().describe('Matches a file in attached_assets\/solutions\/.'),
   "tags": zod.array(zod.string()).optional()
 }).describe('An individual model fitted under a solution.')).describe('Individual models fitted under this solution.')
 })),
@@ -160,7 +160,7 @@ export const GetSolutionsResponseItem = zod.object({
   "brand": zod.string().optional(),
   "description": zod.string().optional(),
   "descriptionArabic": zod.string().optional(),
-  "imageKey": zod.string().describe('Matches a file in attached_assets\/solutions\/.'),
+  "imageKey": zod.string().optional().describe('Matches a file in attached_assets\/solutions\/.'),
   "tags": zod.array(zod.string()).optional()
 }).describe('An individual model fitted under a solution.')).describe('Individual models fitted under this solution.')
 })
