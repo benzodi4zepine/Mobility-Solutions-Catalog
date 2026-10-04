@@ -33,6 +33,19 @@ const buildCategories = () => [
 
 const prostheticSolutions = [
   {
+    id: "above-knee-prosthesis",
+    title: "Above knee prosthesis (transfemoral)",
+    titleArabic: "الطرف الاصطناعي فوق الركبة",
+    category: "Lower limb",
+    description:
+      "A complete above-knee limb: a custom carbon socket, a knee joint, a pylon and a foot, built and aligned as one.",
+    descriptionArabic:
+      "طرف كامل فوق الركبة: حاضنة كربونية حسب القياس، ومفصل ركبة، وأنبوب، وقدم، تُبنى وتُحاذى كوحدة واحدة.",
+    tags: ["Above knee", "Transfemoral", "Custom"],
+    imageKey: "above-knee",
+    featured: false,
+  },
+  {
     id: "smart-knees",
     title: "Microprocessor & smart knee joints",
     titleArabic: "مفاصل الركبة الذكية",

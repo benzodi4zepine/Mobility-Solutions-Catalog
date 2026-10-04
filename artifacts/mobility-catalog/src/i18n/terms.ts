@@ -19,6 +19,7 @@ const TERMS: Record<string, string> = {
   // Tags
   Microprocessor: 'معالج دقيق',
   'Above knee': 'فوق الركبة',
+  Transfemoral: 'عبر الفخذ',
   'Below knee': 'تحت الركبة',
   Adaptive: 'متكيّف',
   'Energy return': 'ارتداد الطاقة',
