@@ -13,9 +13,10 @@
  * back to a placeholder labelled "photo pending", so the layout holds and the
  * gap stays visible.
  *
- * `imageKey` values in use: smart-knee, carbon-foot, socket, bionic-hand,
- * passive-limb, spinal-brace, carbon-afo, kafo, insole,
- * diabetic-care.
+ * The `imageKey` values in use are whatever the catalog declares - see
+ * `lib/catalog`. They are deliberately not listed here: a hand-kept copy of
+ * that list goes stale the first time a device is added, and a stale list is
+ * worse than none when it is the thing you reach for to name a new file.
  */
 const files = import.meta.glob<string>(
   '../../../../attached_assets/solutions/*.{jpg,jpeg,png,webp,avif}',

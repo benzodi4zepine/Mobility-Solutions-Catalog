@@ -20,6 +20,7 @@ const TERMS: Record<string, string> = {
   Microprocessor: 'معالج دقيق',
   'Above knee': 'فوق الركبة',
   Transfemoral: 'عبر الفخذ',
+  'Hip disarticulation': 'فصل الورك',
   'Below knee': 'تحت الركبة',
   Adaptive: 'متكيّف',
   'Energy return': 'ارتداد الطاقة',

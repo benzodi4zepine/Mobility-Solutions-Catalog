@@ -46,6 +46,19 @@ const prostheticSolutions = [
     featured: false,
   },
   {
+    id: "hip-disarticulation",
+    title: "Hip disarticulation prosthesis",
+    titleArabic: "الطرف الاصطناعي لفصل الورك",
+    category: "Lower limb",
+    description:
+      "A complete limb for amputation at the hip: a moulded pelvic socket, a hip joint, a knee joint and a foot, built and aligned as one.",
+    descriptionArabic:
+      "طرف كامل للبتر عند الورك: حاضنة حوضية مصبوبة، ومفصل ورك، ومفصل ركبة، وقدم، تُبنى وتُحاذى كوحدة واحدة.",
+    tags: ["Hip disarticulation", "Custom", "Alignment"],
+    imageKey: "hip-disarticulation",
+    featured: false,
+  },
+  {
     id: "smart-knees",
     title: "Microprocessor & smart knee joints",
     titleArabic: "مفاصل الركبة الذكية",
