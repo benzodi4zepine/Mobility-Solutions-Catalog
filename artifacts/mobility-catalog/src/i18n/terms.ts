@@ -22,6 +22,7 @@ const TERMS: Record<string, string> = {
   Transfemoral: 'عبر الفخذ',
   'Hip disarticulation': 'فصل الورك',
   'Below knee': 'تحت الركبة',
+  Transtibial: 'عبر الظنبوب',
   Adaptive: 'متكيّف',
   'Energy return': 'ارتداد الطاقة',
   Carbon: 'كربون',

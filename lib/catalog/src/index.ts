@@ -46,6 +46,19 @@ const prostheticSolutions = [
     featured: false,
   },
   {
+    id: "below-knee-prosthesis",
+    title: "Below knee prosthesis (transtibial)",
+    titleArabic: "الطرف الاصطناعي تحت الركبة",
+    category: "Lower limb",
+    description:
+      "A below-knee limb: a custom socket, suspension, an adapter and a foot, built and aligned as one and finished to match the sound side.",
+    descriptionArabic:
+      "طرف تحت الركبة: حاضنة حسب القياس، وتعليق، ووصلة، وقدم، تُبنى وتُحاذى كوحدة واحدة وتُنهى لتطابق الطرف السليم.",
+    tags: ["Below knee", "Transtibial", "Custom"],
+    imageKey: "below-knee",
+    featured: false,
+  },
+  {
     id: "hip-disarticulation",
     title: "Hip disarticulation prosthesis",
     titleArabic: "الطرف الاصطناعي لفصل الورك",
