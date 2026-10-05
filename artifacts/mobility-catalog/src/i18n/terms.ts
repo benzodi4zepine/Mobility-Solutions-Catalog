@@ -27,6 +27,7 @@ const TERMS: Record<string, string> = {
   'Energy return': 'ارتداد الطاقة',
   Carbon: 'كربون',
   Suspension: 'تعليق',
+  'Socket interface': 'واجهة الحاضنة',
   Myoelectric: 'كهربائي عضلي',
   Bionic: 'إلكتروني',
   Mechanical: 'ميكانيكي',

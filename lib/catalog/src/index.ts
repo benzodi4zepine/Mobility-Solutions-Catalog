@@ -111,6 +111,24 @@ const prostheticSolutions = [
     featured: true,
   },
   {
+    id: "silicone-liners",
+    title: "Silicone liners",
+    titleArabic: "البطانات السيليكونية",
+    category: "Socket technology",
+    brand: "Ottobock",
+    description:
+      "The layer between limb and socket: a silicone liner that cushions the residual limb, spreads load across it, and holds the socket in place.",
+    descriptionArabic:
+      "الطبقة بين الطرف والحاضنة: بطانة سيليكونية تبطّن الطرف المتبقي، وتوزّع الحمل عليه، وتثبّت الحاضنة في مكانها.",
+    tags: ["Suspension", "Comfort", "Socket interface"],
+    // The UneoFlex photograph doubles as the card's cover. Copying it to a
+    // second filename only to name it "silicone-liner" would put the same
+    // bytes in the repository twice - the build dedupes them back to one
+    // asset anyway - so the cover points at the photograph that already exists.
+    imageKey: "liner-uneoflex",
+    featured: false,
+  },
+  {
     id: "bionic-hands",
     title: "Myoelectric & bionic hands",
     titleArabic: "الأيدي الكهربائية و BEBIONIC",
@@ -331,6 +349,15 @@ type Product = {
  * clinical team has approved - product claims are theirs to make, not ours.
  */
 const productsBySolution: Record<string, Product[]> = {
+  "silicone-liners": [
+    // Named from the products themselves. Deliberately no descriptions: what
+    // each Ottobock liner is indicated for is the clinic's to state, not
+    // something to write from the side of a liner.
+    { id: "liner-uneoflex", name: "UneoFlex (6Y510)", brand: "Ottobock", imageKey: "liner-uneoflex" },
+    { id: "liner-caleo", name: "Caleo 3D (6Y93)", brand: "Ottobock", imageKey: "liner-caleo" },
+    { id: "liner-skeo", name: "Skeo Unique", brand: "Ottobock", imageKey: "liner-skeo" },
+    { id: "liner-dvs", name: "DVS (6Y94)", brand: "Ottobock", imageKey: "liner-dvs" },
+  ],
   // The clinic's own list of what it fits under each family. These are
   // variants rather than separate products, which is why they live here and
   // not as cards of their own: one HKAFO card listing both joint options reads
