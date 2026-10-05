@@ -117,15 +117,28 @@ const prostheticSolutions = [
     category: "Socket technology",
     brand: "Ottobock",
     description:
-      "The layer between limb and socket: a silicone liner that cushions the residual limb, spreads load across it, and holds the socket in place.",
+      "The layer between limb and socket, in silicone: it cushions the residual limb, spreads load across it, and holds the socket in place.",
     descriptionArabic:
-      "الطبقة بين الطرف والحاضنة: بطانة سيليكونية تبطّن الطرف المتبقي، وتوزّع الحمل عليه، وتثبّت الحاضنة في مكانها.",
+      "الطبقة بين الطرف والحاضنة، من السيليكون: تبطّن الطرف المتبقي، وتوزّع الحمل عليه، وتثبّت الحاضنة في مكانها.",
     tags: ["Suspension", "Comfort", "Socket interface"],
-    // The UneoFlex photograph doubles as the card's cover. Copying it to a
-    // second filename only to name it "silicone-liner" would put the same
-    // bytes in the repository twice - the build dedupes them back to one
-    // asset anyway - so the cover points at the photograph that already exists.
-    imageKey: "liner-uneoflex",
+    // The Caleo photograph doubles as the card's cover rather than being
+    // copied to a second filename: the build would dedupe the two back to one
+    // asset anyway, so the copy would only be weight in the repository.
+    imageKey: "liner-caleo",
+    featured: false,
+  },
+  {
+    id: "gel-liners",
+    title: "Gel liners",
+    titleArabic: "بطانات الجل",
+    category: "Socket technology",
+    brand: "Ottobock",
+    description:
+      "The same layer in gel rather than silicone. Which of the two suits a limb is decided at fitting.",
+    descriptionArabic:
+      "الطبقة نفسها بالجل بدلاً من السيليكون. أيّ المادتين تناسب الطرف يُحدَّد عند القياس.",
+    tags: ["Suspension", "Comfort", "Socket interface"],
+    imageKey: "gel-liner",
     featured: false,
   },
   {
@@ -349,14 +362,17 @@ type Product = {
  * clinical team has approved - product claims are theirs to make, not ours.
  */
 const productsBySolution: Record<string, Product[]> = {
+  // Named from the products themselves. Deliberately no descriptions: what
+  // each Ottobock liner is indicated for is the clinic's to state, not
+  // something to write from the side of a liner.
   "silicone-liners": [
-    // Named from the products themselves. Deliberately no descriptions: what
-    // each Ottobock liner is indicated for is the clinic's to state, not
-    // something to write from the side of a liner.
-    { id: "liner-uneoflex", name: "UneoFlex (6Y510)", brand: "Ottobock", imageKey: "liner-uneoflex" },
     { id: "liner-caleo", name: "Caleo 3D (6Y93)", brand: "Ottobock", imageKey: "liner-caleo" },
     { id: "liner-skeo", name: "Skeo Unique", brand: "Ottobock", imageKey: "liner-skeo" },
-    { id: "liner-dvs", name: "DVS (6Y94)", brand: "Ottobock", imageKey: "liner-dvs" },
+  ],
+  "gel-liners": [
+    { id: "liner-uneoflex", name: "UneoFlex (6Y510)", brand: "Ottobock", imageKey: "liner-uneoflex" },
+    // The fourth photograph is the card's cover rather than a named model:
+    // the clinic asked for the picture without the product name on it.
   ],
   // The clinic's own list of what it fits under each family. These are
   // variants rather than separate products, which is why they live here and
