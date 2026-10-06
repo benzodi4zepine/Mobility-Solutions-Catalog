@@ -46,6 +46,19 @@ const prostheticSolutions = [
     featured: false,
   },
   {
+    id: "knee-disarticulation",
+    title: "Knee disarticulation prosthesis",
+    titleArabic: "الطرف الاصطناعي لفصل الركبة",
+    category: "Lower limb",
+    description:
+      "A limb for amputation through the knee joint. The residual limb is long, so the socket runs the length of the thigh and the knee unit sits below it rather than inside it.",
+    descriptionArabic:
+      "طرف للبتر عبر مفصل الركبة. الطرف المتبقي طويل، لذا تمتد الحاضنة على طول الفخذ ويقع مفصل الركبة أسفلها لا داخلها.",
+    tags: ["Knee disarticulation", "Custom", "Alignment"],
+    imageKey: "knee-disarticulation",
+    featured: false,
+  },
+  {
     id: "below-knee-prosthesis",
     title: "Below knee prosthesis (transtibial)",
     titleArabic: "الطرف الاصطناعي تحت الركبة",
