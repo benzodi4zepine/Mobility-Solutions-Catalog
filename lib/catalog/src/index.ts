@@ -121,10 +121,10 @@ const prostheticSolutions = [
     descriptionArabic:
       "الطبقة بين الطرف والحاضنة، من السيليكون: تبطّن الطرف المتبقي، وتوزّع الحمل عليه، وتثبّت الحاضنة في مكانها.",
     tags: ["Suspension", "Comfort", "Socket interface"],
-    // The Caleo photograph doubles as the card's cover rather than being
+    // The Skeo photograph doubles as the card's cover rather than being
     // copied to a second filename: the build would dedupe the two back to one
     // asset anyway, so the copy would only be weight in the repository.
-    imageKey: "liner-caleo",
+    imageKey: "liner-skeo",
     featured: false,
   },
   {
@@ -366,11 +366,11 @@ const productsBySolution: Record<string, Product[]> = {
   // each Ottobock liner is indicated for is the clinic's to state, not
   // something to write from the side of a liner.
   "silicone-liners": [
-    { id: "liner-caleo", name: "Caleo 3D (6Y93)", brand: "Ottobock", imageKey: "liner-caleo" },
     { id: "liner-skeo", name: "Skeo Unique", brand: "Ottobock", imageKey: "liner-skeo" },
   ],
   "gel-liners": [
     { id: "liner-uneoflex", name: "UneoFlex (6Y510)", brand: "Ottobock", imageKey: "liner-uneoflex" },
+    { id: "liner-caleo", name: "Caleo 3D (6Y93)", brand: "Ottobock", imageKey: "liner-caleo" },
     // The fourth photograph is the card's cover rather than a named model:
     // the clinic asked for the picture without the product name on it.
   ],
