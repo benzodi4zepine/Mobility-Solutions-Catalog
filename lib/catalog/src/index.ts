@@ -72,6 +72,19 @@ const prostheticSolutions = [
     featured: false,
   },
   {
+    id: "partial-foot",
+    title: "Partial foot amputation",
+    titleArabic: "بتر جزئي للقدم",
+    category: "Lower limb",
+    description:
+      "Prostheses for amputation through the foot. No two are alike: how much of the foot remains, and where it ends, decides the shape of the device, so each one is built to that foot rather than chosen from a range.",
+    descriptionArabic:
+      "أطراف للبتر على مستوى القدم. لا تتشابه حالتان: مقدار ما تبقّى من القدم وموضع نهايته يحدّدان شكل الجهاز، لذا يُبنى كل جهاز على تلك القدم بعينها لا يُختار من مقاسات جاهزة.",
+    tags: ["Partial foot", "Custom", "Case by case"],
+    imageKey: "partial-foot",
+    featured: false,
+  },
+  {
     id: "smart-knees",
     title: "Microprocessor & smart knee joints",
     titleArabic: "مفاصل الركبة الذكية",

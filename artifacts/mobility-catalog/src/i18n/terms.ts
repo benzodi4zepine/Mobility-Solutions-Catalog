@@ -21,6 +21,8 @@ const TERMS: Record<string, string> = {
   'Above knee': 'فوق الركبة',
   Transfemoral: 'عبر الفخذ',
   'Hip disarticulation': 'فصل الورك',
+  'Partial foot': 'قدم جزئية',
+  'Case by case': 'حالة بحالة',
   'Below knee': 'تحت الركبة',
   Transtibial: 'عبر الظنبوب',
   Adaptive: 'متكيّف',
