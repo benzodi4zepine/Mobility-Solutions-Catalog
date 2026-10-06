@@ -371,14 +371,10 @@ const productsBySolution: Record<string, Product[]> = {
   "silicone-liners": [
     { id: "liner-skeo", name: "Skeo Unique", brand: "Ottobock", imageKey: "liner-skeo" },
   ],
-  "gel-liners": [
-    { id: "liner-uneoflex", name: "UneoFlex (6Y510)", brand: "Ottobock", imageKey: "liner-uneoflex" },
-    { id: "liner-caleo", name: "Caleo 3D (6Y93)", brand: "Ottobock", imageKey: "liner-caleo" },
-    // The rest of the gel photographs are gallery images rather than named
-    // models. One has no product identity in it at all, and naming the others
-    // would mean reading a model name off a photograph and betting the clinic
-    // on it. The clinic can name them whenever it wants to.
-  ],
+  // Gel liners deliberately lists no models. The clinic supplies whatever a
+  // patient asks for, so a "models we fit" list would read as a limit on what
+  // it will supply. The photographs stay; the naming goes. Solutions with no
+  // entry here get an empty list and the section does not render.
   // The clinic's own list of what it fits under each family. These are
   // variants rather than separate products, which is why they live here and
   // not as cards of their own: one HKAFO card listing both joint options reads

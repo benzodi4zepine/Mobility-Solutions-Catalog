@@ -32,6 +32,13 @@ const result = await page.evaluate(async ({ dataUri, aw, ah, maxEdge, quality })
   const probe = document.createElement('canvas');
   probe.width = W; probe.height = H;
   const pctx = probe.getContext('2d', { willReadFrequently: true });
+  // Flatten onto white first. A transparent pixel reads as rgb(0,0,0), so a
+  // cut-out PNG or WebP would otherwise have its backdrop sampled as black -
+  // filling the frame black and, worse, counting every transparent pixel as
+  // subject because it is darker than the backdrop. Compositing first makes a
+  // cut-out behave exactly like the same product shot on a white sweep.
+  pctx.fillStyle = '#ffffff';
+  pctx.fillRect(0, 0, W, H);
   pctx.drawImage(img, 0, 0);
   const { data } = pctx.getImageData(0, 0, W, H);
 
