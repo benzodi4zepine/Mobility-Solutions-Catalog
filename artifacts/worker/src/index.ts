@@ -36,8 +36,20 @@ const json = (body: unknown, status = 200) =>
     headers: { "content-type": "application/json" },
   });
 
-/** The catalog is fixed data, so let the edge hold it rather than re-running this. */
-const CATALOG_CACHE = "public, max-age=300, stale-while-revalidate=86400";
+/**
+ * Let the edge hold the catalog rather than re-running this, but only just.
+ *
+ * The page's JavaScript is content-hashed and replaced the moment a deploy
+ * lands; this JSON is not, so for as long as a client may serve a stale copy
+ * the two can disagree. They did: a 24-hour stale-while-revalidate window had
+ * browsers pairing the new bundle with a day-old catalog, drawing cards for
+ * solutions that no longer existed and a "photo pending" placeholder for every
+ * image key the new bundle had never heard of.
+ *
+ * So the window is now minutes, not a day. The catalog is a few kilobytes and
+ * the worker is cheap; a deploy being visibly wrong is not.
+ */
+const CATALOG_CACHE = "public, max-age=60, stale-while-revalidate=60";
 
 const cached = (body: unknown) =>
   new Response(JSON.stringify(body), {
