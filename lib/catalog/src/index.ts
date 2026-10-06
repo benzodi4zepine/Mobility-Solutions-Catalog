@@ -115,16 +115,19 @@ const prostheticSolutions = [
     title: "Silicone liners",
     titleArabic: "البطانات السيليكونية",
     category: "Socket technology",
-    brand: "Ottobock",
+    // No brand on the card: the gallery carries a Wagner liner as well as
+    // Ottobock ones, so a single manufacturer across the whole card would be a
+    // claim its own photographs contradict. Named models carry their own.
     description:
       "The layer between limb and socket, in silicone: it cushions the residual limb, spreads load across it, and holds the socket in place.",
     descriptionArabic:
       "الطبقة بين الطرف والحاضنة، من السيليكون: تبطّن الطرف المتبقي، وتوزّع الحمل عليه، وتثبّت الحاضنة في مكانها.",
     tags: ["Suspension", "Comfort", "Socket interface"],
-    // The Skeo photograph doubles as the card's cover rather than being
-    // copied to a second filename: the build would dedupe the two back to one
-    // asset anyway, so the copy would only be weight in the repository.
-    imageKey: "liner-skeo",
+    // The gallery leads with the Skeo photograph, so it stays the cover. It is
+    // on disk twice, here and behind the named model, because Vite hashes by
+    // content and emits one asset for both - and pointing the model at the
+    // gallery's filename would break it silently the day the cover changes.
+    imageKey: "silicone-liner",
     featured: false,
   },
   {

@@ -6,7 +6,12 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 
-const [src, out, aspect = '4:5', maxEdge = '1400', quality = '0.85'] = process.argv.slice(2);
+// --keep-alpha leaves a cut-out's transparency alone instead of flattening it
+// onto the backdrop, so the card's own background shows through and follows
+// the light and dark themes. Detection still runs on a white-flattened copy.
+const argv = process.argv.slice(2);
+const keepAlpha = argv.includes('--keep-alpha');
+const [src, out, aspect = '4:5', maxEdge = '1400', quality = '0.85'] = argv.filter((a) => !a.startsWith('--'));
 const [aw, ah] = aspect.split(':').map(Number);
 
 const browser = await chromium.launch();
@@ -23,7 +28,7 @@ if (!mime) {
 }
 const dataUri = `data:${mime};base64,${(await readFile(src)).toString('base64')}`;
 
-const result = await page.evaluate(async ({ dataUri, aw, ah, maxEdge, quality }) => {
+const result = await page.evaluate(async ({ dataUri, aw, ah, maxEdge, quality, keepAlpha }) => {
   const img = new Image();
   img.src = dataUri;
   await img.decode();
@@ -64,23 +69,42 @@ const result = await page.evaluate(async ({ dataUri, aw, ah, maxEdge, quality })
     .map((v) => Math.round(v / corners.length));
   const bgLum = (bgRgb[0] + bgRgb[1] + bgRgb[2]) / 3;
 
-  const cols = new Int32Array(W), rows = new Int32Array(H);
-  for (let y = 0; y < H; y++) {
-    for (let x = 0; x < W; x++) {
-      const i = (y * W + x) * 4;
-      const r = data[i], g = data[i + 1], b = data[i + 2];
-      const sat = Math.max(r, g, b) - Math.min(r, g, b);
-      const lum = (r + g + b) / 3;
-      if (sat > 28 || lum < bgLum - 55) { cols[x]++; rows[y]++; }
-    }
-  }
   // a column/row counts as subject only once enough of it qualifies, so dust
   // and sensor noise cannot drag the box out to the frame edge
   const colMin = Math.max(4, Math.round(H * 0.004));
   const rowMin = Math.max(4, Math.round(W * 0.004));
-  let minX = W, minY = H, maxX = -1, maxY = -1;
-  for (let x = 0; x < W; x++) if (cols[x] >= colMin) { if (x < minX) minX = x; maxX = x; }
-  for (let y = 0; y < H; y++) if (rows[y] >= rowMin) { if (y < minY) minY = y; maxY = y; }
+  const findBox = (satMin, lumDrop) => {
+    const cols = new Int32Array(W), rows = new Int32Array(H);
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const i = (y * W + x) * 4;
+        const r = data[i], g = data[i + 1], b = data[i + 2];
+        const sat = Math.max(r, g, b) - Math.min(r, g, b);
+        const lum = (r + g + b) / 3;
+        if (sat > satMin || lum < bgLum - lumDrop) { cols[x]++; rows[y]++; }
+      }
+    }
+    let x0 = W, y0 = H, x1 = -1, y1 = -1;
+    for (let x = 0; x < W; x++) if (cols[x] >= colMin) { if (x < x0) x0 = x; x1 = x; }
+    for (let y = 0; y < H; y++) if (rows[y] >= rowMin) { if (y < y0) y0 = y; y1 = y; }
+    return [x0, y0, x1, y1];
+  };
+
+  // The strict pass: neutral-vs-saturated, which separates a coloured device
+  // from a grey sweep far better than distance from a sampled tone.
+  let [minX, minY, maxX, maxY] = findBox(28, 55);
+  // But a pale translucent liner on a white sweep is neither saturated nor
+  // dark, and the strict pass finds only the printing on its side - cropping
+  // the ends of the device clean off. When the box it returns is too small to
+  // be the product the photograph is of, fall back to a pass that keys on any
+  // departure from the backdrop at all. The column and row minimums still
+  // keep dust and noise out of it.
+  const area = (maxX - minX + 1) * (maxY - minY + 1);
+  if (!(area > 0) || area < W * H * 0.12) {
+    const [gx0, gy0, gx1, gy1] = findBox(10, 8);
+    const gentle = (gx1 - gx0 + 1) * (gy1 - gy0 + 1);
+    if (gx1 > gx0 && gy1 > gy0 && gentle > area) [minX, minY, maxX, maxY] = [gx0, gy0, gx1, gy1];
+  }
 
   let bw = maxX - minX + 1, bh = maxY - minY + 1;
   const pad = Math.round(Math.max(bw, bh) * 0.07);
@@ -118,14 +142,16 @@ const result = await page.evaluate(async ({ dataUri, aw, ah, maxEdge, quality })
   // Fill with the photo's own backdrop, not pure white. A tall narrow shot
   // cannot reach 4:5 without the crop running off the sides, and white padding
   // against a studio backdrop that is a shade warmer leaves a visible seam down
-  // the edge of the card.
-  ctx.fillStyle = `rgb(${bgRgb[0]}, ${bgRgb[1]}, ${bgRgb[2]})`;
-  ctx.fillRect(0, 0, cw, ch);
+  // the edge of the card. A cut-out kept transparent gets no fill at all.
+  if (!keepAlpha) {
+    ctx.fillStyle = `rgb(${bgRgb[0]}, ${bgRgb[1]}, ${bgRgb[2]})`;
+    ctx.fillRect(0, 0, cw, ch);
+  }
   ctx.drawImage(img, x0, y0, bw, bh, 0, 0, cw, ch);
   const blob = await new Promise((res) => canvas.toBlob(res, 'image/webp', quality));
   const buf = new Uint8Array(await blob.arrayBuffer());
   return { W, H, subject: [minX, minY, maxX, maxY], cw, ch, bytes: Array.from(buf) };
-}, { dataUri, aw, ah, maxEdge: Number(maxEdge), quality: Number(quality) });
+}, { dataUri, aw, ah, maxEdge: Number(maxEdge), quality: Number(quality), keepAlpha });
 
 if (result.error) { console.error(src, result.error); process.exit(1); }
 await writeFile(out, Buffer.from(result.bytes));
