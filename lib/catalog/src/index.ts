@@ -123,7 +123,10 @@ const prostheticSolutions = [
       "The layer between limb and socket: it cushions the residual limb, spreads load across it, and holds the socket in place. Supplied in silicone and in gel, with the choice made at fitting.",
     descriptionArabic:
       "الطبقة بين الطرف والحاضنة: تبطّن الطرف المتبقي، وتوزّع الحمل عليه، وتثبّت الحاضنة في مكانها. تتوفّر من السيليكون ومن الجل، ويُحدَّد الخيار عند القياس.",
-    tags: ["Suspension", "Comfort", "Socket interface"],
+    // The two materials lead, because on a card that covers both they are what
+    // a visitor is scanning for - and they double as catalog filters, so
+    // someone searching for a gel liner now has a chip to click.
+    tags: ["Gel liner", "Silicone liner", "Suspension", "Comfort", "Socket interface"],
     imageKey: "liner",
     featured: false,
   },

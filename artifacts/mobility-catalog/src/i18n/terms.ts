@@ -28,6 +28,8 @@ const TERMS: Record<string, string> = {
   Carbon: 'كربون',
   Suspension: 'تعليق',
   'Socket interface': 'واجهة الحاضنة',
+  'Gel liner': 'بطانة جل',
+  'Silicone liner': 'بطانة سيليكون',
   Myoelectric: 'كهربائي عضلي',
   Bionic: 'إلكتروني',
   Mechanical: 'ميكانيكي',
