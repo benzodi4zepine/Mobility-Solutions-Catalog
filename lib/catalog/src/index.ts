@@ -123,10 +123,6 @@ const prostheticSolutions = [
     descriptionArabic:
       "الطبقة بين الطرف والحاضنة، من السيليكون: تبطّن الطرف المتبقي، وتوزّع الحمل عليه، وتثبّت الحاضنة في مكانها.",
     tags: ["Suspension", "Comfort", "Socket interface"],
-    // The gallery leads with the Skeo photograph, so it stays the cover. It is
-    // on disk twice, here and behind the named model, because Vite hashes by
-    // content and emits one asset for both - and pointing the model at the
-    // gallery's filename would break it silently the day the cover changes.
     imageKey: "silicone-liner",
     featured: false,
   },
@@ -371,13 +367,11 @@ const productsBySolution: Record<string, Product[]> = {
   // Named from the products themselves. Deliberately no descriptions: what
   // each Ottobock liner is indicated for is the clinic's to state, not
   // something to write from the side of a liner.
-  "silicone-liners": [
-    { id: "liner-skeo", name: "Skeo Unique", brand: "Ottobock", imageKey: "liner-skeo" },
-  ],
-  // Gel liners deliberately lists no models. The clinic supplies whatever a
-  // patient asks for, so a "models we fit" list would read as a limit on what
-  // it will supply. The photographs stay; the naming goes. Solutions with no
-  // entry here get an empty list and the section does not render.
+  // Neither liner card lists models. The clinic supplies whatever a patient
+  // asks for, so a "models we fit" list reads as a limit on what it will
+  // supply rather than as a catalog. The photographs stay; the naming goes.
+  // Solutions with no entry here get an empty list and the section does not
+  // render at all.
   // The clinic's own list of what it fits under each family. These are
   // variants rather than separate products, which is why they live here and
   // not as cards of their own: one HKAFO card listing both joint options reads
