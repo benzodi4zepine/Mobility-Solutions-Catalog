@@ -251,6 +251,19 @@ const orthoticSolutions = [
     featured: false,
   },
   {
+    id: "night-kafo",
+    title: "Night KAFOs",
+    titleArabic: "أجهزة KAFO الليلية",
+    category: "Lower limb",
+    description:
+      "A full-length posterior shell, lined and closed with wide straps. It is worn lying down rather than for walking, holding the knee and ankle in position through the night.",
+    descriptionArabic:
+      "قالب خلفي بطول الطرف، مبطّن ويُغلق بأحزمة عريضة. يُلبس أثناء الاستلقاء لا للمشي، ويحافظ على وضع الركبة والكاحل طوال الليل.",
+    tags: ["KAFO", "Night", "Custom"],
+    imageKey: "night-kafo",
+    featured: false,
+  },
+  {
     id: "hkafo",
     title: "Hip knee ankle foot orthosis (HKAFO)",
     titleArabic: "جهاز الورك والركبة والكاحل والقدم (HKAFO)",
