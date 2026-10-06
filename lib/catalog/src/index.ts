@@ -111,36 +111,20 @@ const prostheticSolutions = [
     featured: true,
   },
   {
-    id: "silicone-liners",
-    title: "Silicone liners",
-    titleArabic: "البطانات السيليكونية",
+    // One card, not two. The clinic supplies whichever material a patient
+    // asks for, so the two were never separate offerings - the difference
+    // belongs in a sentence, not in two pages a visitor has to choose
+    // between. No brand and no models for the same reason.
+    id: "liners",
+    title: "Liners",
+    titleArabic: "البطانات",
     category: "Socket technology",
-    // No brand on the card: the gallery carries a Wagner liner as well as
-    // Ottobock ones, so a single manufacturer across the whole card would be a
-    // claim its own photographs contradict. Named models carry their own.
     description:
-      "The layer between limb and socket, in silicone: it cushions the residual limb, spreads load across it, and holds the socket in place.",
+      "The layer between limb and socket: it cushions the residual limb, spreads load across it, and holds the socket in place. Supplied in silicone and in gel, with the choice made at fitting.",
     descriptionArabic:
-      "الطبقة بين الطرف والحاضنة، من السيليكون: تبطّن الطرف المتبقي، وتوزّع الحمل عليه، وتثبّت الحاضنة في مكانها.",
+      "الطبقة بين الطرف والحاضنة: تبطّن الطرف المتبقي، وتوزّع الحمل عليه، وتثبّت الحاضنة في مكانها. تتوفّر من السيليكون ومن الجل، ويُحدَّد الخيار عند القياس.",
     tags: ["Suspension", "Comfort", "Socket interface"],
-    imageKey: "silicone-liner",
-    featured: false,
-  },
-  {
-    id: "gel-liners",
-    title: "Gel liners",
-    titleArabic: "بطانات الجل",
-    category: "Socket technology",
-    // No brand on the card: the gallery now carries WillowWood and ALPS
-    // liners as well as Ottobock ones, so a single manufacturer across the
-    // whole card would be a claim the photographs contradict. The models that
-    // are named carry their own brand.
-    description:
-      "The same layer in gel rather than silicone. Which of the two suits a limb is decided at fitting.",
-    descriptionArabic:
-      "الطبقة نفسها بالجل بدلاً من السيليكون. أيّ المادتين تناسب الطرف يُحدَّد عند القياس.",
-    tags: ["Suspension", "Comfort", "Socket interface"],
-    imageKey: "gel-liner",
+    imageKey: "liner",
     featured: false,
   },
   {
