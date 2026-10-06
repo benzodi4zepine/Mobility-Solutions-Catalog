@@ -132,7 +132,10 @@ const prostheticSolutions = [
     title: "Gel liners",
     titleArabic: "بطانات الجل",
     category: "Socket technology",
-    brand: "Ottobock",
+    // No brand on the card: the gallery now carries WillowWood and ALPS
+    // liners as well as Ottobock ones, so a single manufacturer across the
+    // whole card would be a claim the photographs contradict. The models that
+    // are named carry their own brand.
     description:
       "The same layer in gel rather than silicone. Which of the two suits a limb is decided at fitting.",
     descriptionArabic:
@@ -371,8 +374,10 @@ const productsBySolution: Record<string, Product[]> = {
   "gel-liners": [
     { id: "liner-uneoflex", name: "UneoFlex (6Y510)", brand: "Ottobock", imageKey: "liner-uneoflex" },
     { id: "liner-caleo", name: "Caleo 3D (6Y93)", brand: "Ottobock", imageKey: "liner-caleo" },
-    // The fourth photograph is the card's cover rather than a named model:
-    // the clinic asked for the picture without the product name on it.
+    // The rest of the gel photographs are gallery images rather than named
+    // models. One has no product identity in it at all, and naming the others
+    // would mean reading a model name off a photograph and betting the clinic
+    // on it. The clinic can name them whenever it wants to.
   ],
   // The clinic's own list of what it fits under each family. These are
   // variants rather than separate products, which is why they live here and
